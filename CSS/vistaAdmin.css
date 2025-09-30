@@ -1,0 +1,208 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* ====== ENCABEZADO ====== */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #888888;
+  color: white;
+  height: 60px;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Ícono de menú */
+.menu-icono {
+  font-size: 24px;
+  cursor: pointer;
+}
+.menu-icono:hover {
+  color: #64b055;
+  filter: brightness(1.5);
+  transition: all 0.3s ease;
+}
+
+/* Usuario en el centro */
+.usuario {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+.usuario i {
+  font-size: 20px;
+}
+
+/* Botón cerrar sesión */
+.cerrarSesion a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s ease;
+}
+.cerrarSesion a:hover {
+  color: #64b055;
+  filter: brightness(1.5);
+  transition: all 0.3s ease;
+}
+
+/* Contenedor de encabezado del sidebar */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+
+/* Parte 1: "Inova" */
+#parte1 {
+  font-size: 34px;
+  font-weight: bold;
+  color: #ffffff;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Parte 2: "X" */
+#parte2 {
+  font-size: 46px;            
+  font-weight: 900;
+  filter: brightness(1.3);
+  color: #64b055;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* ====== SIDEBAR DESLIZANTE ====== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background: #888888;
+  color: #fff;
+  padding: 20px;
+  transform: translateX(-100%); /* oculto por defecto */
+  transition: transform 0.3s ease;
+  z-index: 200;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar ul li {
+  margin: 15px 0;
+}
+.sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  display: block;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+.sidebar ul li a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Overlay (oscurece fondo cuando sidebar está activo) */
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 150;
+}
+
+/* Estado activo */
+.sidebar.active {
+  transform: translateX(0);
+}
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Carrusel de imágenes */
+.carrusel {
+  position: relative;
+  width: 90vw;
+  max-width: 1100px;
+  height: 60vh;
+  max-height: 600px;
+  margin: 50px auto;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgb(0, 0, 0);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carrusel-imagenes {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  transition: transform 0.5s ease;
+  align-items: center;
+  justify-content: center;
+}
+.carrusel-img {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.carrusel-img.activa {
+  display: block;
+}
+.carrusel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 2;
+}
+.carrusel-btn.prev {
+  left: 10px;
+}
+.carrusel-btn.next {
+  right: 10px;
+}
+
+/* Agrega esto a vistaAdmin.css */
+.carrusel-texto {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 1.2rem;
+  background: rgba(0,0,0,0.4);
+  padding: 10px 0;
+  border-radius: 0 0 10px 10px;
+  pointer-events: none;
+  z-index: 1;
+}
