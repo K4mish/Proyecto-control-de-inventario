@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario inicio sesion</title>
+    <link rel="stylesheet" href="/CSS/index.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box login">
+            <form action="#" onsubmit="validarLogin(event)">
+                <h1>Iniciar Sesion</h1>
+                <div class="input-box">
+                    <input id="usuario" type="text" placeholder="Usuario" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input id="clave" type="password" placeholder="Contraseña" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <div class="forgot-link">
+                    <a href="olvidoContraseña.html">Olvido su contraseña?</a>
+                </div>
+                <button type="submit" class="btn">Iniciar Sesion</button>
+            </form>
+        </div>
+
+        <div class="form-box register">
+            <form action="#">
+                <h1>Registro</h1>
+                <div class="input-box">
+                    <input type="text" placeholder="Usuario" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="email" placeholder="Correo" required>
+                    <i class='bx bxs-envelope' ></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" placeholder="Contraseña" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <button type="submit" class="btn">Registrarse</button>
+            </form>
+        </div>
+
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1>Bienvenido!</h1>
+                <p>No tienes una cuenta?</p>
+                <button class="btn register-btn">Registrate</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1>Bienvenido!</h1>
+                <p>Ya tienes una cuenta?</p>
+                <button class="btn login-btn">Iniciar Sesion</button>
+            </div>
+        </div>
+    </div>
+    <script src="/JS/script.js"></script>
+</body>
+</html>
