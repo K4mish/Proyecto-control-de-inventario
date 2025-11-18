@@ -1,0 +1,29 @@
+{
+  "name": "proyecto-control-de-inventario",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/K4mish/Proyecto-control-de-inventario.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/K4mish/Proyecto-control-de-inventario/issues"
+  },
+  "homepage": "https://github.com/K4mish/Proyecto-control-de-inventario#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.15.3",
+    "nodemon": "^3.1.11"
+  }
+}
