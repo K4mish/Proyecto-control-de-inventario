@@ -10,14 +10,14 @@
 <body>
     <div class="container">
         <div class="form-box login">
-            <form action="#" onsubmit="validarLogin(event)">
+            <form id="formLogin">
                 <h1>Iniciar Sesion</h1>
                 <div class="input-box">
-                    <input id="usuario" type="text" placeholder="Usuario" required>
+                    <input id="correo" type="email" placeholder="Correo" required>
                     <i class='bx bxs-user'></i>
                 </div>
                 <div class="input-box">
-                    <input id="clave" type="password" placeholder="Contraseña" required>
+                    <input id="contrasena" type="password" placeholder="Contraseña" required>
                     <i class='bx bxs-lock-alt' ></i>
                 </div>
                 <div class="forgot-link">
@@ -28,18 +28,26 @@
         </div>
 
         <div class="form-box register">
-            <form action="#">
+            <form id="formRegister">
                 <h1>Registro</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Usuario" required>
+                    <input id="usuarioRegistro" type="text" placeholder="Usuario" required>
                     <i class='bx bxs-user'></i>
                 </div>
                 <div class="input-box">
-                    <input type="email" placeholder="Correo" required>
+                    <input id="cedulaRegistro" type="text" placeholder="Cedula" required>
+                    <i class='bx bxs-id-card'></i>
+                </div>
+                <div class="input-box">
+                    <input id="telefonoRegistro" type="text" placeholder="Telefono" required>
+                    <i class='bx bxs-phone' ></i>
+                </div>
+                <div class="input-box">
+                    <input id="correoRegistro" type="email" placeholder="Correo" required>
                     <i class='bx bxs-envelope' ></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Contraseña" required>
+                    <input id="contrasenaRegistro" type="password" placeholder="Contraseña" required>
                     <i class='bx bxs-lock-alt' ></i>
                 </div>
                 <button type="submit" class="btn">Registrarse</button>

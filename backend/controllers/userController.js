@@ -4,7 +4,7 @@ export const perfilUsuario = async (req, res) => {
     try {
         const usuario = await obtenerUsuarioPorId(req.user.id);
         if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
-        delete usuario.contraseña; // Eliminar la contraseña del objeto antes de enviarlo
+        delete usuario.contrasena; // Eliminar la contraseña del objeto antes de enviarlo
         return res.json({usuario});
     } catch (error) {
         console.error(error);
