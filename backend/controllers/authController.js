@@ -48,14 +48,14 @@ export const inicioSesion = async (req, res) => {
         if (!contrasenaValida) return res.status(400).json({ mensaje: 'Correo o contraseña incorrectos' });
         //Construir el payload del token
         const payload = {
-            id: usuario.id,
+            idUsuario: usuario.idUsuario,
             nombre: usuario.nombre,
             correo: usuario.correo,
             rol: usuario.rol
         };
         //Generar el token JWT
         const token = jwt.sign(payload, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN});
-        return res.json({mensaje: 'Inicio de sesión exitoso', token, role: usuario.rol, nombre: usuario.nombre});
+        return res.json({mensaje: 'Inicio de sesión exitoso', token, rol: usuario.rol, nombre: usuario.nombre});
     } catch (error){
         console.error(error);
         return res.status(500).json({mensaje: 'Error en el servidor'});

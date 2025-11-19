@@ -3,25 +3,20 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
 export const autenticar = (req, res, next) => {
-    const authHeader = req.headers.authorization || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(' ')(1) : (req.body.token || req.query.token);
+    const token = req.headers['authorization']?.split(' ')[1];
     if (!token) return res.status(401).json({ mensaje: 'Token no proporcionado' });
-    try {
-        const payload = jwt.verify(token, JWT_SECRET);
-        req.user = payload;
+    jwt.verify(token, process.env.JWT_SECRET, (error, payload) => {
+        if (error) return res.status(401).json({ mensaje: 'Token inválido' });
+        req.usuario = payload;
         next();
-    } catch (error){
-        return res.status(401).json({ mensaje: 'Token inválido' });
-    }
+    });
 };
-// Autotorizar roles en rutas protegidas
-export const autorizarRoles = (allowedRoles = []) => {
-    return (req, res, next) => {
-        if (!req.user) return res.status(401).json({ mensaje: 'No autenticado' });
-        if (!allowedRoles.includes(req.user.role)) return res.status(403).json({ mensaje: 'No tiene permisos' });
-        next();
-    };
-}
+// Autotorizar que es admin
+export const autorizarAdmin = (req, res, next) => {
+    if (!req.usuario) return res.status(401).json({ mensaje: 'No autenticado' });
+    if (req.usuario.rol !== 'admin'){
+        return res.status(403).json({ mensaje: 'No tiene permisos' });
+    }
+    next();
+};

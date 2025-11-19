@@ -1,0 +1,31 @@
+const token = localStorage.getItem('token');
+if (!token) {
+  window.location.href = '../html/index.html';
+} else {
+  cargarUsuario();
+}
+
+async function cargarUsuario() {
+  try {
+    const response = await fetch('http://localhost:3000/api/auth/usuarios/perfil', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+    if (!response.ok) {
+      localStorage.removeItem('token');
+      window.location.href = '../html/index.html';
+      return;
+    }
+    const data = await response.json();
+    // Mostar el nombre del usuario en la interfaz
+    document.getElementById('nombreUsuario').textContent = data.nombreCompleto;
+    if (data.usuario.rol === 'admin') {
+      window.location.href = '../html/admin.html';
+    }
+  } catch (error) {
+    console.error('Error al cargar el usuario:', error);
+    window.location.href = '../html/index.html';
+  }
+}
