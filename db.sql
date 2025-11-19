@@ -13,7 +13,7 @@ CREATE TABLE usuarios (
   cedula VARCHAR(20) NOT NULL,
   telefono VARCHAR(15) NOT NULL,
   correo VARCHAR(100) NOT NULL,
-  estado ENUM('activo', 'inactivo') NOT NULL,
+  contraseña VARCHAR(255) NOT NULL,
   fechaIngreso DATE NOT NULL,
   roles_idRol INT NOT NULL,
   CONSTRAINT fk_usuario_rol FOREIGN KEY (roles_idRol) REFERENCES roles(idRol)
