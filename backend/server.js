@@ -18,10 +18,10 @@ app.use(cors({
 // Rutas
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const frontedPages = path.join(__dirname, '..', 'frontend', 'html');
-app.use('/html', express.static(frontedPages));
+const frontedPages = path.join(__dirname, '..', 'frontend');
+app.use(express.static(frontedPages));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(frontedPages, 'index.html'));
+    res.sendFile(path.join(frontedPages, "html", 'index.html'));
 });
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`)
@@ -33,5 +33,5 @@ app.use('/api/usuarios', userRoutes);
 // Puerto de escucha
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost${PORT}`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

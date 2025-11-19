@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { obtenerRolPorNombre } from '../models/roleModel.js';
-import { crearUsuario, obtenerUsuarioPorEmail } from '../models/userModel.js';
+import { crearUsuario, obtenerUsuarioPorCorreo } from '../models/userModel.js';
 
 dotenv.config();
 
@@ -41,7 +41,7 @@ export const inicioSesion = async (req, res) => {
         const {correo, contraseña} = req.body;
         if (!correo || !contraseña) return res.status(400).json({ mensaje: 'Faltan datos requeridos' });
         //Buscar el usuario por correo
-        const usuario = await obtenerUsuarioPorEmail(correo);
+        const usuario = await obtenerUsuarioPorCorreo(correo);
         if (!usuario) return res.status(400).json({ mensaje: 'Correo o contraseña incorrectos' });
         //Verificar la contraseña
         const contraseñaValida = await bcrypt.compare(contraseña, usuario.contraseña);

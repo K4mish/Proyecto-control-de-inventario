@@ -1,4 +1,4 @@
-import pool from "../config/db";
+import pool from "../config/db.js";
 
 export const crearUsuario = async ({nombre, apellido, cedula, telefono, correo, contraseña,roles_idRol}) => {
     const [result] = await pool.query(
