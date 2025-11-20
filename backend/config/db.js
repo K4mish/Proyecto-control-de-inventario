@@ -3,7 +3,7 @@ import mysql from 'mysql2/promise';
 
 dotenv.config();
 
-const pool = mysql.createPool({
+export const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -23,4 +23,3 @@ const pool = mysql.createPool({
         console.error(`Error de conexión a la base de datos: ${error.code} - ${error.message}`);
     }
 })
-export default pool;

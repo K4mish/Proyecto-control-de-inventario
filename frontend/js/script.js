@@ -61,21 +61,21 @@ document.getElementById("formRegister").addEventListener("submit", async(e) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nombre: nombre,
-          apellido: apellido,
-          cedula: cedulaRegistro,
-          telefono: telefonoRegistro,
-          correo: correoRegistro,
-          contrasena: contrasenaRegistro,
-          rol: 'empleado'
+            nombre: nombre,
+            apellido: apellido,
+            cedula: cedulaRegistro,
+            telefono: telefonoRegistro,
+            correo: correoRegistro,
+            contrasena: contrasenaRegistro,
+            rol: 'empleado'
         })
     });
     const data = await response.json();
     if (response.ok){
-      alert(data.mensaje);
-      document.getElementById("formRegister").reset();
-      window.location.href = '../html/index.html';
+        alert(data.mensaje);
+        document.getElementById("formRegister").reset();
+        window.location.href = '../html/index.html';
     } else {
-      alert(data.mensaje || 'Error en el registro');
+        alert(data.mensaje || 'Error en el registro');
     }
 });

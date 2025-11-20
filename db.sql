@@ -51,6 +51,7 @@ CREATE TABLE productos (
   precioCompra DECIMAL(10,2) NOT NULL,
   precioVenta DECIMAL(10,2) NOT NULL,
   stock INT NOT NULL,
+  urlImagen VARCHAR(2048),
   proveedores_idProveedor INT NOT NULL,
   categorias_idCategoria INT NOT NULL,
   CONSTRAINT fk_producto_proveedor FOREIGN KEY (proveedores_idProveedor) REFERENCES proveedores(idProveedor),

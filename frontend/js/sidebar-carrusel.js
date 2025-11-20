@@ -15,11 +15,6 @@ overlay.addEventListener("click", () => {
   overlay.classList.remove("active");
 });
 
-const nombre = localStorage.getItem("usuarioActivo");
-if (nombre) {
-  document.getElementById("nombreUsuario").textContent = nombre;
-}
-
 let indice = 0;
 const imagenes = document.querySelectorAll('.carrusel-img');
 const btnPrev = document.querySelector('.carrusel-btn.prev');

@@ -1,4 +1,4 @@
-import pool from '../config/db.js';
+import { pool } from '../config/db.js';
 
 export const obtenerRolPorId = async (idRol) => {
     const [rows] = await pool.query('SELECT * FROM roles where idRol = ?', [idRol]);

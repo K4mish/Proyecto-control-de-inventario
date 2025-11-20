@@ -1,11 +1,13 @@
-const token = localStorage.getItem('token');
-if (!token) {
-  window.location.href = '../html/index.html';
-} else {
-  cargarUsuario();
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '../html/index.html';
+    } else {
+      cargarUsuario(token);
+  }
+});
 
-async function cargarUsuario() {
+async function cargarUsuario(token) {
   try {
     const response = await fetch('http://localhost:3000/api/usuarios/perfil', {
       method: 'GET',
