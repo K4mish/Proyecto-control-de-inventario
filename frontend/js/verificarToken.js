@@ -1,9 +1,11 @@
+let token = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('token');
-    if (!token) {
-      window.location.href = '../html/index.html';
-    } else {
-      cargarUsuario(token);
+  token = localStorage.getItem('token');
+  if (!token){
+    window.location.href = '../html/index.html';
+  } else {
+    cargarUsuario(token);
   }
 });
 
