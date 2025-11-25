@@ -3,7 +3,7 @@ USE control_inventario;
 
 CREATE TABLE roles (
   idRol INT AUTO_INCREMENT PRIMARY KEY,
-  rol ENUM('admin', 'empleado') NOT NULL DEFAULT 'empleado'
+  rol VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE usuarios (
@@ -13,8 +13,7 @@ CREATE TABLE usuarios (
   cedula VARCHAR(20) NOT NULL,
   telefono VARCHAR(15) NOT NULL,
   correo VARCHAR(100) NOT NULL,
-  estado ENUM('activo', 'inactivo') NOT NULL,
-  fechaIngreso DATE NOT NULL,
+  contrasena VARCHAR(255) NOT NULL,
   roles_idRol INT NOT NULL,
   CONSTRAINT fk_usuario_rol FOREIGN KEY (roles_idRol) REFERENCES roles(idRol)
 );
@@ -23,11 +22,6 @@ CREATE TABLE categorias (
   idCategoria INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
   descripcion TEXT
-);
-
-CREATE TABLE tipoProveedor (
-  idTipoProveedor INT AUTO_INCREMENT PRIMARY KEY,
-  categoria VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE proveedores (
@@ -40,10 +34,9 @@ CREATE TABLE proveedores (
   nombreContacto VARCHAR(45) NOT NULL,
   telefonoContacto VARCHAR(15) NOT NULL,
   correoContacto VARCHAR(100) NOT NULL,
-  fechaRegistro DATE NOT NULL,
   estado ENUM('activo','inactivo') NOT NULL,
-  tipoProveedor_idTipoProveedor INT NOT NULL,
-  CONSTRAINT fk_proveedor_tipo FOREIGN KEY (tipoProveedor_idTipoProveedor) REFERENCES tipoProveedor(idTipoProveedor)
+  categoria_id INT,
+  CONSTRAINT fk_proveedor_categoria FOREIGN KEY (categoria_id) REFERENCES categorias(idCategoria)
 );
 
 CREATE TABLE productos (
@@ -53,6 +46,7 @@ CREATE TABLE productos (
   precioCompra DECIMAL(10,2) NOT NULL,
   precioVenta DECIMAL(10,2) NOT NULL,
   stock INT NOT NULL,
+  urlImagen VARCHAR(2048),
   proveedores_idProveedor INT NOT NULL,
   categorias_idCategoria INT NOT NULL,
   CONSTRAINT fk_producto_proveedor FOREIGN KEY (proveedores_idProveedor) REFERENCES proveedores(idProveedor),
