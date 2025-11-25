@@ -12,8 +12,9 @@ export const listarProveedores = async (req, res) => {
 // Crear proveedor
 export const registrarProveedor = async (req, res) => {
     try {
-        const {nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor} = req.body;
-        const nuevo = await crearProveedor(nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor);
+        console.log("Datos recibidos para nuevo proveedor:", req.body);
+        const {nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id} = req.body;
+        const nuevo = await crearProveedor(nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id);
         res.status(201).json(nuevo);
     } catch (error) {
         res.status(500).json({ message: "Error al crear proveedor", error });

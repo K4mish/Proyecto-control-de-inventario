@@ -24,11 +24,6 @@ CREATE TABLE categorias (
   descripcion TEXT
 );
 
-CREATE TABLE tipoProveedor (
-  idTipoProveedor INT AUTO_INCREMENT PRIMARY KEY,
-  categoria VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE proveedores (
   idProveedor INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
@@ -40,8 +35,8 @@ CREATE TABLE proveedores (
   telefonoContacto VARCHAR(15) NOT NULL,
   correoContacto VARCHAR(100) NOT NULL,
   estado ENUM('activo','inactivo') NOT NULL,
-  tipoProveedor_idTipoProveedor INT NOT NULL,
-  CONSTRAINT fk_proveedor_tipo FOREIGN KEY (tipoProveedor_idTipoProveedor) REFERENCES tipoProveedor(idTipoProveedor)
+  categoria_id INT,
+  CONSTRAINT fk_proveedor_categoria FOREIGN KEY (categoria_id) REFERENCES categorias(idCategoria)
 );
 
 CREATE TABLE productos (

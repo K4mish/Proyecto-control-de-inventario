@@ -6,12 +6,12 @@ export const obtenerProveedores = async () => {
     return rows;
 };
 // Crear un proveedor
-export const crearProveedor = async (nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor) => {
+export const crearProveedor = async (nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id) => {
     const [result] = await pool.query(
-        `INSERT INTO proveedores (nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor]
+        `INSERT INTO proveedores (nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id]
     );
-    return {idProveedor: result.insertId, nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor};
+    return {idProveedor: result.insertId, nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id};
 };
 // Obtener proveedor por id
 export const obtenerProveedorPorId = async (idProveedor) => {
@@ -19,12 +19,12 @@ export const obtenerProveedorPorId = async (idProveedor) => {
     return rows[0];
 };
 // Actualizar proveedor
-export const actualizarProveedor = async (idProveedor,{nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor}) => {
+export const actualizarProveedor = async (idProveedor,{nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id}) => {
     await pool.query(
-        `UPDATE proveedores SET nombre = ?, telefono = ?, correo = ?, direccion = ?, ciudad = ?, nombreContacto = ?, telefonoContacto = ?, correoContacto = ?, estado = ?, tipoProveedor_idTipoProveedor = ? WHERE idProveedor = ?`,
-        [nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor, idProveedor]
+        `UPDATE proveedores SET nombre = ?, telefono = ?, correo = ?, direccion = ?, ciudad = ?, nombreContacto = ?, telefonoContacto = ?, correoContacto = ?, estado = ?, categoria_id = ? WHERE idProveedor = ?`,
+        [nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id, idProveedor]
     );
-    return {idProveedor, nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, tipoProveedor_idTipoProveedor};
+    return {idProveedor, nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id};
 };
 // Eliminar proveedor
 export const eliminarProveedor = async (idProveedor) => {

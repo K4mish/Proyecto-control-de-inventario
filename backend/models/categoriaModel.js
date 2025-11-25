@@ -8,7 +8,7 @@ export const obtenerCategoria = async () => {
 // Crear una categoria
 export const crearCategoria = async (nombre, descripcion) => {
     const [result] = await pool.query(
-        `INSERT INTO categorias (nombre, descripcion) VALUES (?, ?) [nombre, descripcion]`
+        `INSERT INTO categorias (nombre, descripcion) VALUES (?, ?)`, [nombre, descripcion]
     );
     return {idCategoria: result.insertId, nombre, descripcion};
 };
@@ -19,10 +19,11 @@ export const obtenerCategoriaPorId = async (idCategoria) => {
 };
 // Actualizar una categoria
 export const actualizarCategoria = async (idCategoria,{nombre, descripcion}) => {
-    await pool.query(`UPDATE categorias SET nombre = ?, descripcion = ? WHERE idCategoria = ?`, [nombre, descripcion, idCategoria]);
-    return {idCategoria, nombre, descripcion};
+    const [result] = await pool.query(`UPDATE categorias SET nombre = ?, descripcion = ? WHERE idCategoria = ?`, [nombre, descripcion, idCategoria]);
+    return result;
 };
 // Eliminar una categoria
 export const eliminarCategoria = async (idCategoria) => {
-    await pool.query(`DELETE FROM categorias WHERE idCategoria = ?`, [idCategoria]);
+    const [result] = await pool.query(`DELETE FROM categorias WHERE idCategoria = ?`, [idCategoria]);
+    return result;
 };

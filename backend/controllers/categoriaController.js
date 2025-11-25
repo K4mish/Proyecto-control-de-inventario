@@ -1,15 +1,16 @@
-import { obtenerCategoria,crearCategoria,obtenerCategoriaPorId,actualizarCategoria,eliminarCategoria } from "../models/categoriaModel";
+import { obtenerCategoria,crearCategoria,obtenerCategoriaPorId,actualizarCategoria,eliminarCategoria } from "../models/categoriaModel.js";
 
 // Crear una categoria
 export const crear = async (req, res) => {
     try {
         const {nombre, descripcion} = req.body;
-
+        console.log('body recibido', req.body)
         if (!nombre) return res.status(400).json({mensaje:'El nombre es obligatorio'});
 
         const result = await crearCategoria(nombre, descripcion);
         res.status(201).json({mensaje:'Categoria creada', id: result.insertId});
     } catch (error){
+        console.error("Error en crearCategoria:", error);
         res.status(500).json({mensaje:'Error al crear categoria', error});
     }
 };
@@ -42,14 +43,15 @@ export const actualizar = async (req, res) => {
     const { id } = req.params;
     const { nombre, descripcion } = req.body;
 
-    const result = await actualizarCategoria(id, nombre, descripcion);
+    const result = await actualizarCategoria(id, { nombre, descripcion });
 
     if (result.affectedRows === 0)
       return res.status(404).json({ mensaje: "Categoría no encontrada" });
 
     res.json({ mensaje: "Categoría actualizada" });
   } catch (error) {
-    res.status(500).json({ mensaje: "Error al actualizar categoría", error });
+    console.error("Error al actualizar categoría:", error);
+    res.status(500).json({ mensaje: "Error al actualizar categoría", error: error.message });
   }
 };
 // Eliminar categoria

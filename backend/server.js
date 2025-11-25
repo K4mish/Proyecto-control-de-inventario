@@ -41,7 +41,7 @@ app.use('/api', authRoutes);
 app.use('/api/usuarios', userRoutes);
 app.use('/api/productos', productRoutes);
 app.use('/api/categorias', categoriaRoutes);
-app.use('/api/proveedor', productRoutes);
+app.use('/api/proveedor', proveedorRoutes);
 
 // Puerto de escucha
 const PORT = process.env.PORT || 3000;
