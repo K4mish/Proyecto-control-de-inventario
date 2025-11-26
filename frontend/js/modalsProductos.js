@@ -1,4 +1,6 @@
 const API_URL = "http://localhost:3000/api/productos";
+const API_URL_PROVEEDORES = "http://localhost:3000/api/proveedor";
+const API_URL_CATEGORIAS = "http://localhost:3000/api/categorias";
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Token actual:', token);
@@ -15,51 +17,129 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeEditModal = document.getElementById("closeEditModal");
     const openAddModalBtn = document.getElementById("openAddModalBtn");
 
-    // CARGAR PRODUCTOS
+    const addCategoria = document.getElementById("addCategory");
+    const addProveedor = document.getElementById("addProvider");
+
+    const editCategoria = document.getElementById("editCategory");
+    const editProveedor = document.getElementById("editProvider");
+
+    // Mapas para mostrar nombres
+    let categoriasMap = {};
+    let proveedoresMap = {};
+    // Caragar categorias
+    async function loadCategorias() {
+        try {
+            const res = await fetch(API_URL_CATEGORIAS, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const categorias = await res.json();
+
+            categoriasMap = {};
+            addCategoria.innerHTML = `<option value="">Seleccione categoría</option>`;
+            editCategoria.innerHTML = `<option value="">Seleccione categoría</option>`;
+
+            categorias.forEach(cat => {
+                categoriasMap[cat.idCategoria] = cat.nombre;
+
+                let opt1 = document.createElement("option");
+                opt1.value = cat.idCategoria;
+                opt1.textContent = cat.nombre;
+                addCategoria.appendChild(opt1);
+
+                let opt2 = document.createElement("option");
+                opt2.value = cat.idCategoria;
+                opt2.textContent = cat.nombre;
+                editCategoria.appendChild(opt2);
+            });
+
+        } catch (err) {
+            console.error("Error cargando categorías:", err);
+        }
+    }
+    // Cargar proveedor
+    async function loadProveedores() {
+        try {
+            const res = await fetch(API_URL_PROVEEDORES, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const proveedores = await res.json();
+
+            proveedoresMap = {};
+            addProveedor.innerHTML = `<option value="">Seleccione proveedor</option>`;
+            editProveedor.innerHTML = `<option value="">Seleccione proveedor</option>`;
+
+            proveedores.forEach(p => {
+                proveedoresMap[p.idProveedor] = p.nombre;
+
+                let opt1 = document.createElement("option");
+                opt1.value = p.idProveedor;
+                opt1.textContent = p.nombre;
+                addProveedor.appendChild(opt1);
+
+                let opt2 = document.createElement("option");
+                opt2.value = p.idProveedor;
+                opt2.textContent = p.nombre;
+                editProveedor.appendChild(opt2);
+            });
+
+        } catch (err) {
+            console.error("Error cargando proveedores:", err);
+        }
+    }
+    // Cargar productos
     async function loadProducts() {
         try {
             const res = await fetch(API_URL, {
-                headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`},
+                headers: { "Authorization": `Bearer ${token}` }
             });
             const products = await res.json();
             tableBody.innerHTML = "";
-            if (!Array.isArray(products)){
-                console.error('Respuesta inesperada:', products);
-                alert('Error al cargar productos.');
+
+            if (!Array.isArray(products)) {
+                alert("Error al cargar productos");
                 return;
             }
-
-            products.forEach((p) => {
+            products.forEach(p => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${p.idProducto}</td>
                     <td>${p.nombre}</td>
-                    <td>${p.categoria}</td>
-                    <td>$${Number(p.precioCompra).toFixed(2)}</td>
+                    <td>${categoriasMap[p.categoria_id] || "Sin categoría"}</td>
+                    <td>${proveedoresMap[p.proveedor_id] || "Sin proveedor"}</td>
                     <td>$${Number(p.precioVenta).toFixed(2)}</td>
+                    <td>$${Number(p.precioCompra).toFixed(2)}</td>
                     <td>${p.stock}</td>
-                    <td><img src="${p.urlImagen}" alt="${p.nombre}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;"></td>
+                    <td><img src="${p.urlImagen}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;"></td>
                     <td>
-                        <button onclick="openEditModal('${p.idProducto}', '${p.nombre}', '${p.categoria}', '${p.precioCompra}', '${p.precioVenta}', '${p.stock}', '${p.urlImagen}')">Editar</button>
+                        <button onclick="openEditModal(
+                            '${p.idProducto}',
+                            '${p.nombre}',
+                            '${p.categoria_id}',
+                            '${p.proveedor_id}',
+                            '${p.precioVenta}',
+                            '${p.precioCompra}',
+                            '${p.stock}',
+                            '${p.urlImagen}'
+                        )">Editar</button>
                         <button onclick="deleteProduct(${p.idProducto})">Eliminar</button>
                     </td>
                 `;
-            tableBody.appendChild(row);
+                tableBody.appendChild(row);
             });
-        } catch (error) {
-            console.error("Error al cargar productos:", error);
+        } catch (err) {
+            console.error("Error al cargar productos:", err);
         }
     }
     // Eliminar producto
     async function deleteProduct(id) {
-        if (confirm("¿Seguro que deseas eliminar este producto?")) {
-            await fetch(`${API_URL}/${id}`, { 
+        if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+        await fetch(`${API_URL}/${id}`, {
             method: "DELETE",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-            });
-            loadProducts();
-        }
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        loadProducts();
     }
+    window.deleteProduct = deleteProduct;
 
     // Abrir modal de Agregar Producto
     openAddModalBtn.addEventListener("click", () => {addModal.style.display = "flex";});
@@ -67,97 +147,79 @@ document.addEventListener('DOMContentLoaded', () => {
     closeAddModal.addEventListener("click", () => {addModal.style.display = "none";});
 
     // Enviar formulario de Agregar Producto
-    addForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    addForm.addEventListener("submit", async e => {
+        e.preventDefault();
 
-        const producto = document.getElementById("addName").value;
-        const descripcion = document.getElementById("addCategory").value;
-        const precio_venta = parseFloat(document.getElementById("addPrice").value);
-        const precio_compra = precio_venta * 0.8; 
-        const stock = parseInt(document.getElementById("addStock").value);
-        const imagen_url = document.getElementById("addImage").value; 
-        const fecha_compra = new Date().toISOString().split("T")[0];
         const nuevoProducto = {
-            producto,
-            descripcion,
-            precio_compra,
-            precio_venta,
-            stock,
-            imagen_url,
-            fecha_compra,
+            nombre: document.getElementById("addName").value,
+            categoria_id: parseInt(document.getElementById("addCategory").value),
+            proveedor_id: parseInt(document.getElementById("addProvider").value),
+            precioVenta: parseFloat(document.getElementById("addPriceSell").value),
+            precioCompra: parseFloat(document.getElementById("addPriceBuy").value) * 0.8,
+            stock: parseInt(document.getElementById("addStock").value),
+            urlImagen: document.getElementById("addImage").value
         };
 
-        try {
-            const res = await fetch(API_URL, {
+        const res = await fetch(API_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-            body: JSON.stringify(nuevoProducto),
-            });
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(nuevoProducto)
+        });
 
-            if (!res.ok) {
-                throw new Error("Error al crear el producto");
-            }
-
-            alert("Producto agregado correctamente");
-            addModal.style.display = "none";
-            loadProducts();
-            addForm.reset();
-        } catch (error) {
-            console.error("Error al crear producto:", error);
-            alert("No se pudo crear el producto. Revisa la consola del servidor.");
+        if (!res.ok) {
+            alert("Error al crear producto");
+            return;
         }
+        addModal.style.display = "none";
+        addForm.reset();
+        loadProducts();
     });
-
     // Abrir modal de Editar Producto
-    function openEditModal(id, producto, descripcion, precio_compra, precio_venta, stock, imagen_url, fecha_compra) {
+    window.openEditModal = function(id, nombre, categoriaId, proveedorId, precioVenta, precioCompra, stock, urlImagen) {
         editModal.style.display = "flex";
-        document.getElementById("editId").value = id;
-        document.getElementById("editName").value = producto;
-        document.getElementById("editCategory").value = descripcion;
-        document.getElementById("editPrice").value = precio_venta;
-        document.getElementById("editStock").value = stock;
-    }
 
-    // Cerrar modal de editar
+        document.getElementById("editId").value = id;
+        document.getElementById("editName").value = nombre;
+        document.getElementById("editCategory").value = categoriaId;
+        document.getElementById("editProvider").value = proveedorId;
+        document.getElementById("editPriceSell").value = precioVenta;
+        document.getElementById("editPriceBuy").value = precioCompra;
+        document.getElementById("editStock").value = stock;
+        document.getElementById("editImage").value = urlImagen;
+    };
+
     closeEditModal.addEventListener("click", () => {editModal.style.display = "none";});
 
     // Guardar cambios del modal Editar
-    editForm.addEventListener("submit", async (e) => {
+    editForm.addEventListener("submit", async e => {
         e.preventDefault();
 
         const id = document.getElementById("editId").value;
-        const producto = document.getElementById("editName").value;
-        const descripcion = document.getElementById("editCategory").value;
-        const precio_venta = parseFloat(document.getElementById("editPrice").value);
-        const precio_compra = precio_venta * 0.8;
-        const stock = parseInt(document.getElementById("editStock").value);
-        const imagen_url = document.getElementById("editImage").value;
-        const fecha_compra = new Date().toISOString().split("T")[0];
 
         const productoActualizado = {
-            producto,
-            descripcion,
-            precio_compra,
-            precio_venta,
-            stock,
-            imagen_url,
-            fecha_compra,
+            nombre: document.getElementById("editName").value,
+            categoria_id: parseInt(document.getElementById("editCategory").value),
+            proveedor_id: parseInt(document.getElementById("editProvider").value),
+            precioVenta: parseFloat(document.getElementById("editPriceSell").value),
+            precioCompra: parseFloat(document.getElementById("editPriceBuy").value) * 0.8,
+            stock: parseInt(document.getElementById("editStock").value),
+            urlImagen: document.getElementById("editImage").value
         };
-
-        try {
-            await fetch(`${API_URL}/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                body: JSON.stringify(productoActualizado),
-            });
-
-            alert("Producto actualizado correctamente");
-            editModal.style.display = "none";
-            loadProducts();
-        } catch (error) {
-            console.error("Error al actualizar producto:", error);
-            alert("Error al actualizar el producto. Revisa la consola del servidor.");
-        }
+        await fetch(`${API_URL}/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(productoActualizado)
+        });
+        editModal.style.display = "none";
+        loadProducts();
     });
+    loadCategorias();
+    loadProveedores();
     loadProducts();
 });

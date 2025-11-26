@@ -32,10 +32,10 @@ export async function getProductById(req, res) {
 }
 // Crear producto
 export async function addProduct(req, res) {
-    const {nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedores_idProveedor, categorias_idCategoria} = req.body;
-
+    const {nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedor_id, categoria_id} = req.body;
+    console.log("Datos recibidos para nuevo producto:", req.body);
     try {
-        const productId = await createProduct(nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedores_idProveedor || 1, categorias_idCategoria);
+        const productId = await createProduct(nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedor_id, categoria_id);
 
         res.status(201).json({
             message: "Producto creado exitosamente",
@@ -51,10 +51,10 @@ export async function addProduct(req, res) {
 // Editar producto
 export async function editProduct(req, res) {
     const { id } = req.params;
-    const {nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedores_idProveedor, categorias_idCategoria} = req.body;
-
+    const {nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedor_id, categoria_id} = req.body;
+    console.log("Datos recibidos para nuevo proveedor:", req.body);
     try {
-        await updateProduct(id, nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedores_idProveedor || 1, categorias_idCategoria);
+        await updateProduct(id, nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedor_id, categoria_id);
 
         res.json({ message: "Producto actualizado exitosamente" });
     } catch (error) {

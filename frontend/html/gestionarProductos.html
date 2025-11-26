@@ -32,8 +32,7 @@
             <li><a href="../html/gestionarCategoria.html">Gestionar Categorias</a></li>
             <li><a href="../html/gestionarProveedor.html">Gestionar Proveedores</a></li>
             <li><a href="../html/gestionarProductos.html">Gestionar Productos</a></li>
-            <li><a href="../html/registrarVenta.html">Registrar Venta</a></li>
-            <li><a href="../html/verVentas.html">Ver Ventas</a></li>
+            <li><a href="../html/gestionarVentas.html">Gestionar Ventas</a></li>
             <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
             <li><a href="../html/adminUsuarios.html">Administrar Usuarios</a></li>
         </ul>
@@ -50,8 +49,9 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
-                    <th>Precio Compra</th>
+                    <th>Proveedor</th>
                     <th>Precio Venta</th>
+                    <th>Precio Compra</th>
                     <th>Stock</th>
                     <th>Imagen</th>
                     <th>Acciones</th>
@@ -66,8 +66,14 @@
             <h2>Agregar Producto</h2>
             <form id="addForm">
                 <input type="text" id="addName" placeholder="Nombre" required>
-                <input type="text" id="addCategory" placeholder="Categoría" required>
-                <input type="number" id="addPrice" placeholder="Precio" required>
+                <select id="addCategory">
+                    <option value="">Selecciona una categoría</option>
+                </select>
+                <select id="addProvider">
+                    <option value="">Selecciona un proveedor</option>
+                </select>
+                <input type="number" id="addPriceSell" placeholder="Precio Venta" required>
+                <input type="number" id="addPriceBuy" placeholder="Precio Compra" required>
                 <input type="number" id="addStock" placeholder="Stock" required>
                 <input type="url" id="addImage" placeholder="URL de la imagen">
                 <button type="submit">Guardar</button>
@@ -82,8 +88,14 @@
             <form id="editForm">
                 <input type="hidden" id="editId">
                 <input type="text" id="editName" placeholder="Nombre" required>
-                <input type="text" id="editCategory" placeholder="Categoría" required>
-                <input type="number" id="editPrice" placeholder="Precio" required>
+                <select id="editCategory">
+                    <option value="">Selecciona una categoría</option>
+                </select>
+                <select id="editProvider">
+                    <option value="">Selecciona un proveedor</option>
+                </select>
+                <input type="number" id="editPriceSell" placeholder="Precio Venta" required>
+                <input type="number" id="editPriceBuy" placeholder="Precio Compra" required>
                 <input type="number" id="editStock" placeholder="Stock" required>
                 <input type="url" id="editImage" placeholder="URL de la imagen">
                 <button type="submit">Guardar cambios</button>

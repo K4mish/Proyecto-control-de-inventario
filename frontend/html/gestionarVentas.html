@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion Categorias</title>
-    <link rel="stylesheet" href="../css/gestionarTabla.css">
+    <title>Gestion Ventas</title>
+    <link rel="stylesheet" href="../css/gestionarVentas.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
@@ -41,27 +41,31 @@
     <div id="overlay" class="overlay"></div>
 
     <div class="contenedor-tabla">
-        <h2>LISTA DE CATEGORIAS</h2>
-        <button id="openAddModalBtn">+ Agregar Categoria</button>
+        <h2>LISTA DE VENTAS</h2>
+        <button id="openAddModalBtn">+ Agregar Venta</button>
         <table cellspacing="0" cellpadding="10" id="tablaProducto">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Categoria</th>
-                    <th>Descripcion</th>
+                    <th>Empleado</th>
+                    <th>Productos</th>
+                    <th>Subtotal</th>
+                    <th>Total</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="categoryTableBody"></tbody>
+            <tbody id="productTableBody"></tbody>
         </table>
     </div>
     <!--Modal para Agregar Producto -->
     <div id="addModal" class="modal">
         <div class="modal-content">
-            <h2>Agregar Categoria</h2>
+            <h2>Agregar Venta</h2>
             <form id="addForm">
-                <input type="text" id="addCategory" placeholder="Nombre" required>
-                <input type="text" id="addDescription" placeholder="Descripcion">
+                <input type="text" id="addName" placeholder="Empleado" required>
+                <input type="text" id="addProducts" placeholder="Productos" required>
+                <input type="number" id="addSubtotal" placeholder="Subtotal" required>
+                <input type="number" id="addTotal" placeholder="Total" required>
                 <button type="submit">Guardar</button>
                 <button type="button" id="closeAddModal">Cancelar</button>
             </form>
@@ -70,18 +74,20 @@
     <!--Modal para Editar Producto -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h2>Editar Categoria</h2>
-            <form id="editForm"> 
+            <h2>Editar Venta</h2>
+            <form id="editForm">
                 <input type="hidden" id="editId">
-                <input type="text" id="editCategory" placeholder="Nombre" required>
-                <input type="text" id="editDescription" placeholder="Descripcion">
+                <input type="text" id="editName" placeholder="Empleado" required>
+                <input type="text" id="editProducts" placeholder="Productos" required>
+                <input type="number" id="editSubtotal" placeholder="Subtotal" required>
+                <input type="number" id="editTotal" placeholder="Total" required>
                 <button type="submit">Guardar cambios</button>
                 <button type="button" id="closeEditModal">Cancelar</button>
             </form>
         </div>
     </div>
     <script src="../js/verificarToken.js"></script>
-    <script src="../js/modalsCategorias.js"></script>
+    <script src="../js/modalsVentas.js"></script>
     <script src="../js/sidebar.js"></script>
 </body>
 </html>
