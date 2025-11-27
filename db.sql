@@ -55,6 +55,9 @@ CREATE TABLE productos (
 
 CREATE TABLE ventas (
   idVenta INT AUTO_INCREMENT PRIMARY KEY,
+  cantidad INT NOT NULL,
+  precioUnitario DECIMAL(10,2) NOT NULL,
+  subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precioUnitario) STORED,
   total DECIMAL(10,2) NOT NULL,
   estado ENUM('completada','anulada','pendiente') NOT NULL,
   metodoPago ENUM('efectivo','tarjeta','transferencia','otro') NOT NULL DEFAULT 'efectivo',
@@ -65,9 +68,6 @@ CREATE TABLE ventas (
 CREATE TABLE detalleVentas (
   idDetalleVenta INT AUTO_INCREMENT PRIMARY KEY,
   fechaVenta DATE NOT NULL,
-  cantidad INT NOT NULL,
-  precioUnitario DECIMAL(10,2) NOT NULL,
-  subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precioUnitario) STORED,
   ventas_id INT NOT NULL,
   productos_id INT NOT NULL,
   CONSTRAINT fk_detalleVenta_venta FOREIGN KEY (ventas_id) REFERENCES ventas(idVenta),
@@ -76,6 +76,9 @@ CREATE TABLE detalleVentas (
 
 CREATE TABLE compras (
   idCompra INT AUTO_INCREMENT PRIMARY KEY,
+  cantidad INT NOT NULL,
+  precioUnitario DECIMAL(10,2) NOT NULL,
+  subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precioUnitario) STORED,
   total DECIMAL(10,2) NOT NULL,
   estado ENUM('completada','anulada','pendiente') NOT NULL,
   metodoPago ENUM('efectivo','tarjeta','transferencia','otro') NOT NULL DEFAULT 'efectivo',
@@ -88,9 +91,6 @@ CREATE TABLE compras (
 CREATE TABLE detalleCompras (
   idDetalle INT AUTO_INCREMENT PRIMARY KEY,
   fechaCompra DATE NOT NULL,
-  cantidad INT NOT NULL,
-  precioUnitario DECIMAL(10,2) NOT NULL,
-  subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precioUnitario) STORED,
   compras_id INT NOT NULL,
   productos_id INT NOT NULL,
   CONSTRAINT fk_detalleCompra_compra FOREIGN KEY (compras_id) REFERENCES compras(idCompra),

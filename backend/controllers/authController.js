@@ -28,7 +28,7 @@ export const registro = async (req, res) => {
         //Hashear la contraseña
         const contrasenaHasheada = await bcrypt.hash(contrasena, SALT_ROUNDS);
         //Crear el usuario
-        const idUsuario = await crearUsuario({nombre, apellido, cedula, telefono, correo, contrasena: contrasenaHasheada, roles_idRol: rolObj.idRol});
+        const idUsuario = await crearUsuario({nombre, apellido, cedula, telefono, correo, contrasena: contrasenaHasheada, roles_id: rolObj.idRol});
         return res.status(201).json({ mensaje: 'Usuario registrado exitosamente', idUsuario });
     } catch (error){
         console.error('Error en el registro de usuario:', error);
