@@ -25,7 +25,13 @@ export const crearDetalleVenta =async (idVenta, idProducto, cantidad) => {
 // Obtener detalles por venta
 export const obtenerDetallesPorVenta = async (idVenta) => {
     const [rows] = await pool.query(`
-        SELECT dv.*, p.nombre 
+        SELECT 
+            dv.idDetalleVenta,
+            dv.ventas_id,
+            dv.cantidad,
+            dv.precioUnitario,
+            dv.productos_id AS idProducto,  
+            p.nombre 
         FROM detalleVentas dv 
         JOIN productos p ON p.idProducto = dv.productos_id 
         WHERE dv.ventas_id = ?

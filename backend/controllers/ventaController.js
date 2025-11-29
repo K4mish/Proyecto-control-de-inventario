@@ -1,5 +1,6 @@
-import { crearVenta, actualizarSubtotal, obtenerVentas, obtenerVentaPorID } from '../models/ventaModel.js';
+import { crearVenta, actualizarSubtotal, obtenerVentas, obtenerVentaPorID, actualizarEstadoVenta } from '../models/ventaModel.js';
 import { crearDetalleVenta, obtenerDetallesPorVenta } from '../models/detalleVentaModel.js';
+import { devolverStock } from '../models/productosModel.js';
 
 // Crear venta
 export const crearVentaController = async (req, res) => {
@@ -55,5 +56,47 @@ export const actualizarSubtotalController = async (req, res) => {
     res.json({mensaje: 'Subtotal actualizado'});
   } catch (error){
     res.status(500).json({error: error.mensaje});
+  }
+};
+// Actualizar estado
+export const actualizarEstadoVentaController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    console.log(`--- INTENTO DE ACTUALIZAR VENTA #${id} A ESTADO: ${estado} ---`);
+
+    if (!estado) return res.status(400).json({ mensaje: 'Estado obligatorio' });
+
+    const ventaActual = await obtenerVentaPorID(id);
+    if (!ventaActual) return res.status(404).json({ mensaje: 'Venta no encontrada' });
+    if (estado === 'Cancelada' || estado === 'anulada') {
+        
+        if (ventaActual.estado === 'cancelada' || ventaActual.estado === 'anulada') {
+            console.log("La venta ya estaba cancelada anteriormente.");
+            return res.status(400).json({ mensaje: 'Esta venta ya está cancelada.' });
+        }
+
+        const detalles = await obtenerDetallesPorVenta(id);
+        console.log("Productos encontrados en la venta:", detalles);
+
+        for (const detalle of detalles){
+            const idProductoAjustado = detalle.idProducto || detalle.productos_id;
+            const cantidadAjustada = detalle.cantidad;
+
+            if (!idProductoAjustado){
+                console.error("ERROR: No se encontró el ID del producto en el objeto detalle:", detalle);
+                continue;
+            }
+            console.log(`Devolviendo stock -> ID: ${idProductoAjustado}, Cantidad: ${cantidadAjustada}`);
+            await devolverStock(idProductoAjustado, cantidadAjustada);
+        }
+    }
+    const result = await actualizarEstadoVenta(id, estado);
+    console.log("Estado actualizado en BD correctamente.");
+    res.json({ mensaje: `Venta actualizada a ${estado} correctamente.` });
+  } catch (error){
+    console.error("CRASH en actualizarEstadoVentaController:", error);
+    res.status(500).json({ error: error.message });
   }
 };

@@ -31,7 +31,6 @@ export const obtenerVentas = async () => {
 };
 // Obteber una venta por id
 export const obtenerVentaPorID = async (id) => {
-  // AHORA HACEMOS UN JOIN CON LA TABLA USUARIOS
   const [rows] = await pool.query(`
     SELECT 
       v.*, 
@@ -43,4 +42,12 @@ export const obtenerVentaPorID = async (id) => {
   `, [id]);
   
   return rows[0];
+};
+// Actualizar el estado de la venta
+export const actualizarEstadoVenta = async (idVenta, nuevoEstado) => {
+  const [result] = await pool.query(
+    `UPDATE ventas SET estado = ? WHERE idVenta = ?`, 
+    [nuevoEstado, idVenta]
+  );
+  return result;
 };

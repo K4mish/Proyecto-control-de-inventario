@@ -17,9 +17,22 @@ export const findProductById = async (id) => {
 };
 // Listar productos
 export const getAllProduct = async () => {
-    const [rows] = await pool.query(
-        `SELECT idProducto, nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedor_id, categoria_id FROM productos`
-    );
+    const [rows] = await pool.query(`
+        SELECT 
+            p.idProducto,
+            p.nombre,
+            p.descripcion,
+            p.precioCompra,
+            p.precioVenta,
+            p.stock,
+            p.urlImagen,
+            c.nombre AS nombreCategoria,
+            prov.nombre AS nombreProveedor
+        FROM productos p
+        LEFT JOIN categorias c ON p.categoria_id = c.idCategoria
+        LEFT JOIN proveedores prov ON p.proveedor_id = prov.idProveedor
+        ORDER BY p.stock ASC 
+    `); 
     return rows;
 };
 // Eliminar
@@ -51,4 +64,13 @@ export const descontarStock = async (idProducto, cantidad) => {
     }
     
     await pool.query(`UPDATE productos SET stock = stock - ? WHERE idProducto = ?`, [cantidad, idProducto]);
+};
+// Función para devolver stock (sumar)
+export const devolverStock = async (idProducto, cantidad) => {
+    // Usamos 'stock + ?' para sumar lo que devolvemos
+    const [result] = await pool.query(
+        'UPDATE productos SET stock = stock + ? WHERE idProducto = ?',
+        [cantidad, idProducto]
+    );
+    return result;
 };

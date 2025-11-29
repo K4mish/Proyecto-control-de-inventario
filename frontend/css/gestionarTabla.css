@@ -185,24 +185,6 @@ tr:hover {
 }
 
 /* ====== MODAL ====== */
-
-/* ====== BOTÓN VOLVER ====== */
-#volver {
-  background-color: #00a8ff;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 10px 0;
-  float: left;
-  transition: background 0.3s;
-}
-
-#volver:hover {
-background-color: #0079B3;
-}
-
 /* ====== BOTÓN AGREGAR PRODUCTO ====== */
 #openAddModalBtn {
   background-color: #00a8ff;
@@ -334,4 +316,29 @@ form button[type="submit"]:hover {
 
 #closeAddModal:hover, #closeEditModal:hover {
   background-color: #c8c9cc;
+}
+
+/* Estilo principal para la miniatura en la tabla */
+.img-producto {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #f9f9f9;
+}
+/* Efecto opcional: Zoom al pasar el mouse */
+.img-producto:hover {
+    transform: scale(2.5);
+    z-index: 100;
+    position: relative;
+    border: 2px solid #64b055;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+#tablaProducto td img {
+    max-width: 60px;
+    max-height: 60px;
+    object-fit: cover;
 }

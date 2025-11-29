@@ -12,7 +12,6 @@
         <div class="menu-icono" id="menuBtn">
             <i class="bi bi-list"></i>
         </div>
-
         <div class="usuario">
             <i class="bi bi-person-circle"></i>
             <span id="nombreUsuario">Usuario</span>
@@ -23,21 +22,18 @@
             </a>
         </div>
     </div>
-
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h1 id="parte1">Inova</h1><h1 id="parte2">X</h1>
         </div>
         <ul>
-            <li><a href="../html/agregarProducto.html">Agregar Producto</a></li>
-            <li><a href="../html/editarProducto.html">Editar Producto</a></li>
-            <li><a href="../html/eliminarProducto.html">Eliminar Producto</a></li>
-            <li><a href="../html/consultarProducto.html">Consultar Producto</a></li>
-            <li><a href="../html/verTodosLosProductos.html">Ver todos los Productos</a></li>
-            <li><a href="../html/registrarVenta.html">Registrar Venta</a></li>
-            <li><a href="../html/verVentas.html">Ver Ventas</a></li>
+            <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
+            <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
+            <li><a href="../html/gestionarProveedor.html">Gestionar Proveedores</a></li>
+            <li><a href="../html/gestionarProductos.html">Gestionar Productos</a></li>
+            <li><a href="../html/gestionarVentas.html">Gestionar Ventas</a></li>
+            <li><a href="../html/gestionarCompras.html">Gestionar Compras</a></li>
             <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
-            <li><a href="../html/adminUsuarios.html">Administrar Usuarios</a></li>
         </ul>
     </div>
 
@@ -45,6 +41,10 @@
 
     <div class="contenedor-tabla">
         <h2>ALERTAS DE STOCK</h2>
+        <div style="margin-bottom: 15px;">
+            <label><input type="checkbox" id="checkSoloCritico"> Ver solo Stock Crítico/Bajo</label>
+        </div>
+
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
                 <tr>
@@ -54,30 +54,12 @@
                     <th>Estado</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr class="critico">
-                    <td>MP4</td>
-                    <td>Electrodomésticos</td>
-                    <td>2</td>
-                    <td><i class="bi bi-exclamation-triangle-fill"></i> Stock Crítico</td>
-                </tr>
-                <tr class="bajo">
-                    <td>Televisor</td>
-                    <td>Televisores</td>
-                    <td>5</td>
-                    <td><i class="bi bi-bell-fill"></i> Stock Bajo</td>
-                </tr>
-                <tr>
-                    <td>Iphone 14</td>
-                    <td>Telefonos</td>
-                    <td>20</td>
-                    <td><i class="bi bi-check-square-fill"></i> Stock Suficiente</td>
-                </tr>
-            </tbody>
+            <tbody id="alertasTableBody"></tbody>
         </table>
     </div>
 
-    <script src="../js/vistaAdmin.js"></script>
-    <script src="../js/nombreUsuario.js"></script>
+    <script src="../js/verificarToken.js"></script>
+    <script src="../js/alertasStock.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 </html>
