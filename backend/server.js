@@ -10,6 +10,8 @@ import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productosRoutes.js';
 import categoriaRoutes from './routes/categoriaRoutes.js';
 import proveedorRoutes from './routes/proveedorRoutes.js';
+import ventasRoutes from './routes/ventaRoutes.js';
+import detalleVentasRoutes from './routes/detalleVentaRoutes.js';
 
 dotenv.config();
 
@@ -42,6 +44,8 @@ app.use('/api/usuarios', userRoutes);
 app.use('/api/productos', productRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/proveedor', proveedorRoutes);
+app.use('/api/ventas', ventasRoutes);
+app.use('/api/detalleVentas', detalleVentasRoutes);
 
 // Puerto de escucha
 const PORT = process.env.PORT || 3000;

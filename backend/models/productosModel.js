@@ -33,3 +33,22 @@ export const updateProduct = async (id, nombre, descripcion, precioCompra, preci
         [nombre, descripcion, precioCompra, precioVenta, stock, urlImagen, proveedor_id, categoria_id, id]
     );
 };
+// Obtener stock actual
+export const obtenerStock = async (idProducto) => {
+    const [rows] = await pool.query(`SELECT stock FROM productos WHERE idProducto = ?`, [idProducto]);
+    return rows.length > 0 ? rows[0].stock : null;
+};
+// Descontar stock
+export const descontarStock = async (idProducto, cantidad) => {
+    const stockActual = await obtenerStock(idProducto);
+
+    if (stockActual === null){
+        throw new Error('Producto no encontrado');
+    }
+
+    if (stockActual < cantidad){
+        throw new Error(`Stock insuficiente para el producto ID ${idProducto}`);
+    }
+    
+    await pool.query(`UPDATE productos SET stock = stock - ? WHERE idProducto = ?`, [cantidad, idProducto]);
+};

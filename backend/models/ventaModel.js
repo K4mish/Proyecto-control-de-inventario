@@ -1,95 +1,46 @@
-import { pool } from "../config/db.js";
+import { pool } from '../config/db.js';
 
-// ---------------------
-// Crear una venta con detalles
-// ---------------------
-export const createVenta = async (ventaData, detalles) => {
-  const connection = await pool.getConnection();
-  try {
-    await connection.beginTransaction();
-
-    // 1️⃣ Insertar en tabla ventas
-    const { cantidad, precioUnitario, total, estado, metodoPago, usuarios_id } = ventaData;
-    const [ventaResult] = await connection.query(
-      `INSERT INTO ventas (cantidad, precioUnitario, total, estado, metodoPago, usuarios_id) VALUES (?, ?, ?, ?, ?, ?)`,
-      [cantidad, precioUnitario, total, estado, metodoPago, usuarios_id]
-    );
-    const idVenta = ventaResult.insertId;
-
-    // 2️⃣ Insertar detalles
-    for (const detalle of detalles) {
-      const { fechaVenta, productos_id } = detalle;
-      await connection.query(
-        `INSERT INTO detalleVentas (fechaVenta, ventas_id, productos_id) VALUES (?, ?, ?)`,
-        [fechaVenta, idVenta, productos_id]
-      );
-    }
-
-    await connection.commit();
-    return idVenta;
-  } catch (error) {
-    await connection.rollback();
-    throw error;
-  } finally {
-    connection.release();
-  }
+// Crear una venta vacia
+export const crearVenta = async (subtotal, metodoPago, usuarioID) => {
+  const [result] = await pool.query(`INSERT INTO ventas (subtotal, metodoPago, usuarios_id) VALUES (?, ?, ?)`, [subtotal, metodoPago, usuarioID]);
+  return result.insertId;
 };
-
-// ---------------------
-// Obtener todas las ventas con detalles
-// ---------------------
-export const getAllVentas = async () => {
-  const [rows] = await pool.query(
-    `SELECT v.idVenta, v.cantidad, v.precioUnitario, v.subtotal, v.total, v.estado, v.metodoPago, v.usuarios_id,
-            dv.idDetalleVenta, dv.fechaVenta, dv.productos_id
-     FROM ventas v
-     LEFT JOIN detalleVentas dv ON v.idVenta = dv.ventas_id`
-  );
+// Actualizar subtotal al agregar productos
+export const actualizarSubtotal = async (idVenta, subtotal) => {
+  await pool.query(`UPDATE ventas SET subtotal = ? WHERE idVenta = ?`, [subtotal, idVenta]);
+};
+// Obtener ventas
+export const obtenerVentas = async () => {
+  const [rows] = await pool.query(`
+    SELECT 
+        v.idVenta, 
+        v.fecha, 
+        v.subtotal, 
+        v.iva, 
+        v.total, 
+        v.estado, 
+        v.metodoPago, 
+        u.nombre AS nombreUsuario, 
+        u.apellido AS apellidoUsuario,
+        (SELECT COALESCE(SUM(cantidad), 0) FROM detalleVentas WHERE ventas_id = v.idVenta) AS cantidadProductos
+    FROM ventas v 
+    JOIN usuarios u ON u.idUsuario = v.usuarios_id 
+    ORDER BY v.fecha DESC
+  `);
   return rows;
 };
-
-// ---------------------
-// Obtener una venta por ID con detalles
-// ---------------------
-export const findVentaById = async (id) => {
-  const [rows] = await pool.query(
-    `SELECT v.idVenta, v.cantidad, v.precioUnitario, v.subtotal, v.total, v.estado, v.metodoPago, v.usuarios_id,
-            dv.idDetalleVenta, dv.fechaVenta, dv.productos_id
-     FROM ventas v
-     LEFT JOIN detalleVentas dv ON v.idVenta = dv.ventas_id
-     WHERE v.idVenta = ?`,
-    [id]
-  );
-  return rows;
-};
-
-// ---------------------
-// Actualizar venta (solo campos de ventas, detalles se actualizarían por separado)
-// ---------------------
-export const updateVenta = async (id, ventaData) => {
-  const { cantidad, precioUnitario, total, estado, metodoPago, usuarios_id } = ventaData;
-  await pool.query(
-    `UPDATE ventas SET cantidad = ?, precioUnitario = ?, total = ?, estado = ?, metodoPago = ?, usuarios_id = ? WHERE idVenta = ?`,
-    [cantidad, precioUnitario, total, estado, metodoPago, usuarios_id, id]
-  );
-};
-
-// ---------------------
-// Eliminar venta y sus detalles
-// ---------------------
-export const deleteVenta = async (id) => {
-  const connection = await pool.getConnection();
-  try {
-    await connection.beginTransaction();
-
-    await connection.query(`DELETE FROM detalleVentas WHERE ventas_id = ?`, [id]);
-    await connection.query(`DELETE FROM ventas WHERE idVenta = ?`, [id]);
-
-    await connection.commit();
-  } catch (error) {
-    await connection.rollback();
-    throw error;
-  } finally {
-    connection.release();
-  }
+// Obteber una venta por id
+export const obtenerVentaPorID = async (id) => {
+  // AHORA HACEMOS UN JOIN CON LA TABLA USUARIOS
+  const [rows] = await pool.query(`
+    SELECT 
+      v.*, 
+      u.nombre AS nombreUsuario, 
+      u.apellido AS apellidoUsuario 
+    FROM ventas v 
+    JOIN usuarios u ON u.idUsuario = v.usuarios_id 
+    WHERE v.idVenta = ?
+  `, [id]);
+  
+  return rows[0];
 };

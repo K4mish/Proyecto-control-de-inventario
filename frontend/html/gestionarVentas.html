@@ -61,14 +61,84 @@
     <!--Modal para Agregar Producto -->
     <div id="addModal" class="modal">
         <div class="modal-content">
-            <h2>Agregar Venta</h2>
+            <span id="closeAddModal" class="close">&times;</span>
+            <h2>Nueva Venta</h2>
+
             <form id="addForm">
-                <input type="text" id="addName" placeholder="Empleado" required>
-                <input type="text" id="addProducts" placeholder="Productos" required>
-                <input type="number" id="addSubtotal" placeholder="Subtotal" required>
-                <input type="number" id="addTotal" placeholder="Total" required>
-                <button type="submit">Guardar</button>
-                <button type="button" id="closeAddModal">Cancelar</button>
+                <!-- CABECERA: Empleado y Método Pago -->
+                <div class="fila-flexible">
+                    <div class="grupo-input">
+                        <label for="selectUsuario">Empleado:</label>
+                        <select id="selectUsuario" required>
+                            <option value="" disabled selected>Cargando...</option>
+                        </select>
+                    </div>
+                    <div class="grupo-input">
+                        <label for="selectMetodoPago">Método de Pago:</label>
+                        <select id="selectMetodoPago" required>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="tarjeta">Tarjeta</option>
+                            <option value="transferencia">Transferencia</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="separador">
+
+                <!-- SECCIÓN: Buscador y Agregar -->
+                <div class="seccion-agregar">
+                    <h4>Agregar Productos</h4>
+
+                    <div class="grupo-input">
+                        <label for="inputBuscarProducto">Buscar:</label>
+                        <input type="text" id="inputBuscarProducto" placeholder="Filtrar por nombre...">
+                    </div>
+
+                    <div class="fila-agregar-producto">
+                        <div class="grupo-producto">
+                            <label>Producto:</label>
+                            <select id="selectProducto">
+                                <option value="" disabled selected>Seleccionar...</option>
+                            </select>
+                        </div>
+                        <div class="grupo-cantidad">
+                            <label>Cant:</label>
+                            <input type="number" id="inputCantidad" value="1" min="1">
+                        </div>
+                        <div class="grupo-boton">
+                            <button type="button" id="btnAgregarTemporal" class="btn-agregar">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABLA DE PREVISUALIZACIÓN -->
+                <div class="contenedor-tabla-modal">
+                    <table class="tabla-modal">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaProductosBody">
+                            <!-- JS llena esto -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="resumen-venta">
+                    <h3>Total Venta: $<span id="lblSubtotal">0.00</span></h3>
+                </div>
+
+                <!-- BOTONES FINALES -->
+                <div class="botones-modal">
+                    <button type="button" id="btnCancelarModal" class="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Finalizar Venta</button>
+                </div>
             </form>
         </div>
     </div>
@@ -78,13 +148,64 @@
             <h2>Editar Venta</h2>
             <form id="editForm">
                 <input type="hidden" id="editId">
-                <input type="text" id="editName" placeholder="Empleado" required>
+                <select id="editUsuario" required></select>
                 <input type="text" id="editProducts" placeholder="Productos" required>
                 <input type="number" id="editSubtotal" placeholder="Subtotal" required>
                 <input type="number" id="editTotal" placeholder="Total" required>
                 <button type="submit">Guardar cambios</button>
                 <button type="button" id="closeEditModal">Cancelar</button>
             </form>
+        </div>
+    </div>
+    <!-- MODAL DE DETALLES DE VENTA -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span id="closeDetailsModal" class="close">&times;</span>
+
+            <h2>Detalle de Venta #<span id="detailId"></span></h2>
+            <!-- Cabecera Informativa -->
+            <div class="fila-flexible">
+                <div>
+                    <strong>Empleado:</strong> <span id="detailEmpleado"></span>
+                </div>
+                <div>
+                    <strong>Fecha:</strong> <span id="detailFecha"></span>
+                </div>
+                <div>
+                    <strong>Método Pago:</strong> <span id="detailMetodo"></span>
+                </div>
+                <div>
+                    <strong>Estado:</strong> <span id="detailEstado"></span>
+                </div>
+            </div>
+
+            <!-- Tabla de Productos de esa venta -->
+            <div class="contenedor-tabla-modal">
+                <table class="tabla-modal">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unit.</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                        <!-- Se llena con JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Totales -->
+            <div>
+                <p>Subtotal: <strong>$<span id="detailSubtotal">0.00</span></strong></p>
+                <p>IVA (19%): <strong>$<span id="detailIva">0.00</span></strong></p>
+                <p>Total: <strong>$<span id="detailTotal">0.00</span></strong></p>
+            </div>
+
+            <div class="botones-modal">
+                <button type="button" id="btnCloseDetailsBtn" class="btn-cancelar">Cerrar</button>
+            </div>
         </div>
     </div>
     <script src="../js/verificarToken.js"></script>
