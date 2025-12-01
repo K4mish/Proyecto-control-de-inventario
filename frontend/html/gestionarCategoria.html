@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Categorias</title>
+    <link rel="stylesheet" href="../css/gestionarTabla.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="encabezado">
+        <div class="menu-icono" id="menuBtn"><i class="bi bi-list"></i></div>
+        <div class="usuario"><i class="bi bi-person-circle"></i><span id="nombreUsuario">Usuario</span></div>
+        <div class="cerrarSesion"><a href="../html/index.html">Cerrar Sesion <i class="bi bi-box-arrow-right"></i></a></div>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header"><h1 id="parte1">Inova</h1><h1 id="parte2">X</h1></div>
+        <ul>
+            <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
+            <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
+            <li><a href="../html/gestionarProveedor.html">Gestionar Proveedores</a></li>
+            <li><a href="../html/gestionarProductos.html">Gestionar Productos</a></li>
+            <li><a href="../html/gestionarVentas.html">Gestionar Ventas</a></li>
+            <li><a href="../html/gestionarCompras.html">Gestionar Compras</a></li>
+            <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
+        </ul>
+    </div>
+    <div id="overlay" class="overlay"></div>
+
+    <div class="contenedor-tabla">
+        <h2>LISTA DE CATEGORIAS</h2>
+        <div class="clearfix">
+            <button id="openAddModalBtn">+ Agregar Categoria</button>
+        </div>
+        <table cellspacing="0" cellpadding="10" id="tablaProducto">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Categoria</th>
+                    <th>Descripcion</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="categoryTableBody"></tbody>
+        </table>
+    </div>
+    <!-- Modal Agregar -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2>Agregar Categoria</h2>
+            <form id="addForm">
+                <label>Nombre Categoría:</label>
+                <input type="text" id="addCategory" required>
+                <label>Descripción:</label>
+                <input type="text" id="addDescription">
+                <button type="submit">Guardar</button>
+                <button type="button" id="closeAddModal">Cancelar</button>
+            </form>
+        </div>
+    </div>
+    <!-- Modal Editar -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Editar Categoria</h2>
+            <form id="editForm"> 
+                <input type="hidden" id="editId">
+                <label>Nombre Categoría:</label>
+                <input type="text" id="editCategory" required>
+                <label>Descripción:</label>
+                <input type="text" id="editDescription">
+                <button type="submit">Guardar cambios</button>
+                <button type="button" id="closeEditModal">Cancelar</button>
+            </form>
+        </div>
+    </div>
+    <!-- Modal Mensaje (Reemplazo de Alerts) -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <h2 id="msgTitle">Título</h2>
+            <p id="msgText">Mensaje...</p>
+            <button type="button" id="msgBtnOk">Aceptar</button>
+        </div>
+    </div>
+    <script src="../js/verificarToken.js"></script>
+    <script src="../js/modalsCategorias.js"></script>
+    <script src="../js/sidebar.js"></script>
+</body>
+</html>

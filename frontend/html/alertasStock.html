@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alertas de Stock</title>
-    <link rel="stylesheet" href="/CSS/alertasStock.css">
+    <link rel="stylesheet" href="../css/alertasStock.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
@@ -12,32 +12,28 @@
         <div class="menu-icono" id="menuBtn">
             <i class="bi bi-list"></i>
         </div>
-
         <div class="usuario">
             <i class="bi bi-person-circle"></i>
             <span id="nombreUsuario">Usuario</span>
         </div>
         <div class="cerrarSesion">
-            <a href="/HTML/index.html">Cerrar Sesion
+            <a href="../html/index.html">Cerrar Sesion
                 <i class="bi bi-box-arrow-right"></i>
             </a>
         </div>
     </div>
-
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h1 id="parte1">Inova</h1><h1 id="parte2">X</h1>
         </div>
         <ul>
-            <li><a href="/HTML/agregarProducto.html">Agregar Producto</a></li>
-            <li><a href="/HTML/editarProducto.html">Editar Producto</a></li>
-            <li><a href="/HTML/eliminarProducto.html">Eliminar Producto</a></li>
-            <li><a href="/HTML/consultarProducto.html">Consultar Producto</a></li>
-            <li><a href="/HTML/verTodosLosProductos.html">Ver todos los Productos</a></li>
-            <li><a href="/HTML/registrarVenta.html">Registrar Venta</a></li>
-            <li><a href="/HTML/verVentas.html">Ver Ventas</a></li>
-            <li><a href="/HTML/alertasStock.html">Alertas de Stock</a></li>
-            <li><a href="/HTML/adminUsuarios.html">Administrar Usuarios</a></li>
+            <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
+            <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
+            <li><a href="../html/gestionarProveedor.html">Gestionar Proveedores</a></li>
+            <li><a href="../html/gestionarProductos.html">Gestionar Productos</a></li>
+            <li><a href="../html/gestionarVentas.html">Gestionar Ventas</a></li>
+            <li><a href="../html/gestionarCompras.html">Gestionar Compras</a></li>
+            <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
         </ul>
     </div>
 
@@ -45,6 +41,10 @@
 
     <div class="contenedor-tabla">
         <h2>ALERTAS DE STOCK</h2>
+        <div style="margin-bottom: 15px;">
+            <label><input type="checkbox" id="checkSoloCritico"> Ver solo Stock Crítico/Bajo</label>
+        </div>
+
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
                 <tr>
@@ -54,30 +54,12 @@
                     <th>Estado</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr class="critico">
-                    <td>MP4</td>
-                    <td>Electrodomésticos</td>
-                    <td>2</td>
-                    <td><i class="bi bi-exclamation-triangle-fill"></i> Stock Crítico</td>
-                </tr>
-                <tr class="bajo">
-                    <td>Televisor</td>
-                    <td>Televisores</td>
-                    <td>5</td>
-                    <td><i class="bi bi-bell-fill"></i> Stock Bajo</td>
-                </tr>
-                <tr>
-                    <td>Iphone 14</td>
-                    <td>Telefonos</td>
-                    <td>20</td>
-                    <td><i class="bi bi-check-square-fill"></i> Stock Suficiente</td>
-                </tr>
-            </tbody>
+            <tbody id="alertasTableBody"></tbody>
         </table>
     </div>
 
-    <script src="/JS/vistaAdmin.js"></script>
-    <script src="/JS/nombreUsuario.js"></script>
+    <script src="../js/verificarToken.js"></script>
+    <script src="../js/alertasStock.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 </html>

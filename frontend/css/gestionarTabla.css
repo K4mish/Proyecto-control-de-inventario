@@ -1,0 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Vital para que inputs y selects midan lo mismo */
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* ====== ENCABEZADO ====== */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #888888;
+  color: white;
+  height: 60px;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.menu-icono { font-size: 24px; cursor: pointer; }
+.usuario {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 8px; font-size: 16px;
+}
+.cerrarSesion a {
+  color: white; text-decoration: none; font-weight: bold;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ====== SIDEBAR ====== */
+.sidebar {
+  position: fixed; top: 0; left: 0; width: 250px; height: 100%;
+  background: #888888; color: #fff; padding: 20px;
+  transform: translateX(-100%); transition: transform 0.3s ease; z-index: 200;
+}
+.sidebar.active { transform: translateX(0); }
+.overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease; z-index: 150;
+}
+.overlay.active { opacity: 1; pointer-events: auto; }
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar ul li { margin: 15px 0; }
+.sidebar ul li a {
+  color: #fff; text-decoration: none; font-weight: 600; display: block;
+  padding: 8px; border-radius: 6px; transition: background 0.3s ease;
+}
+.sidebar ul li a:hover { background: rgba(255,255,255,0.1); }
+.sidebar-header { display: flex; align-items: center; }
+#parte1 { font-size: 34px; font-weight: bold; color: white; }
+#parte2 { font-size: 46px; font-weight: 900; color: #64b055; }
+
+/* ====== CONTENEDOR PRINCIPAL ====== */
+.contenedor-tabla {
+    font-family: "Lora", serif;
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+/* ====== TABLA ====== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+th {
+    background: #64b055;
+    color: white;
+    padding: 12px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    vertical-align: middle;
+}
+tr:hover { background: #f1f1f1; }
+
+.img-producto {
+    width: 50px; height: 50px; object-fit: cover;
+    border-radius: 4px; border: 1px solid #ddd;
+}
+
+/* ====== BOTONES ====== */
+/* Botón AGREGAR PRINCIPAL (Azul) */
+#openAddModalBtn {
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  float: right;
+  font-weight: bold;
+}
+#openAddModalBtn:hover { background-color: #008ecc; }
+
+/* Botones dentro de la tabla */
+button { cursor: pointer; border: none; border-radius: 4px; padding: 6px 10px; color: white; margin: 2px; }
+
+/* Botón EDITAR (Azul) */
+button[onclick*="Edit"], .editBtn {
+    background-color: #00a8ff;
+}
+button[onclick*="Edit"]:hover, .editBtn:hover {
+    background-color: #008ecc;
+}
+
+/* Botón ELIMINAR (Rojo) */
+button[onclick*="delete"], .deleteBtn {
+    background-color: #e84118;
+}
+button[onclick*="delete"]:hover, .deleteBtn:hover {
+    background-color: #c23616;
+}
+
+/* Botón CONTACTO/OTROS */
+button[onclick*="Contact"] {
+    background-color: #00a8ff;
+}
+
+button[onclick*="Contact"]:hover {
+    background-color: #008ecc; 
+}
+
+/* ====== MODAL FORMULARIO (INPUTS COMO LISTA) ====== */
+.modal {
+  display: none; position: fixed; z-index: 100;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center; align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+  text-align: left;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+.modal h2 {
+  text-align: center; color: #273c75; margin-bottom: 20px;
+  border-bottom: 2px solid #64b055; padding-bottom: 10px;
+}
+
+/* Estilos de los Formularios dentro del Modal */
+form {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
+}
+
+/* --- NUEVO: ESTILO PARA LOS LABELS --- */
+form label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: -5px;
+    margin-top: 5px;
+}
+
+/* INPUTS Y SELECTS */
+.modal-content input, 
+.modal-content select {
+    width: 100%; 
+    height: 40px; 
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fff;
+    outline: none;
+}
+
+.modal-content input:focus, 
+.modal-content select:focus {
+    border-color: #00a8ff;
+}
+
+/* BOTONES MODAL ... */
+form button[type="submit"] {
+    background-color: #00a8ff; 
+    color: white;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    width: 100%;
+}
+form button[type="submit"]:hover { background-color: #008ecc; }
+
+form button[type="button"], 
+#closeContactModal { 
+    background-color: #6c757d; 
+    color: white;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    width: 100%; 
+    margin-top: 5px;
+    display: block; 
+}
+
+form button[type="button"]:hover,
+#closeContactModal:hover { 
+    background-color: #545b62; 
+}
+.clearfix::after { content: ""; clear: both; display: table; }
+
+/* ==== MODAL DE MENSAJES (Alertas Personalizadas) ==== */
+#messageModal .modal-content {
+    width: 350px;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+#messageModal p {
+    font-size: 16px;
+    color: #333;
+    margin: 20px 0;
+}
+
+#messageModal button {
+    background-color: #00a8ff;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#messageModal button:hover {
+    background-color: #008ecc;
+}

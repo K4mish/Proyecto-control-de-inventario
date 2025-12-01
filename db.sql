@@ -3,7 +3,7 @@ USE control_inventario;
 
 CREATE TABLE roles (
   idRol INT AUTO_INCREMENT PRIMARY KEY,
-  rol ENUM('admin', 'empleado') NOT NULL DEFAULT 'empleado'
+  rol VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE usuarios (
@@ -13,21 +13,15 @@ CREATE TABLE usuarios (
   cedula VARCHAR(20) NOT NULL,
   telefono VARCHAR(15) NOT NULL,
   correo VARCHAR(100) NOT NULL,
-  estado ENUM('activo', 'inactivo') NOT NULL,
-  fechaIngreso DATE NOT NULL,
-  roles_idRol INT NOT NULL,
-  CONSTRAINT fk_usuario_rol FOREIGN KEY (roles_idRol) REFERENCES roles(idRol)
+  contrasena VARCHAR(255) NOT NULL,
+  roles_id INT NOT NULL,
+  CONSTRAINT fk_usuario_rol FOREIGN KEY (roles_id) REFERENCES roles(idRol)
 );
 
 CREATE TABLE categorias (
   idCategoria INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
   descripcion TEXT
-);
-
-CREATE TABLE tipoProveedor (
-  idTipoProveedor INT AUTO_INCREMENT PRIMARY KEY,
-  categoria VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE proveedores (
@@ -40,10 +34,9 @@ CREATE TABLE proveedores (
   nombreContacto VARCHAR(45) NOT NULL,
   telefonoContacto VARCHAR(15) NOT NULL,
   correoContacto VARCHAR(100) NOT NULL,
-  fechaRegistro DATE NOT NULL,
   estado ENUM('activo','inactivo') NOT NULL,
-  tipoProveedor_idTipoProveedor INT NOT NULL,
-  CONSTRAINT fk_proveedor_tipo FOREIGN KEY (tipoProveedor_idTipoProveedor) REFERENCES tipoProveedor(idTipoProveedor)
+  categoria_id INT,
+  CONSTRAINT fk_proveedor_categoria FOREIGN KEY (categoria_id) REFERENCES categorias(idCategoria)
 );
 
 CREATE TABLE productos (
@@ -53,52 +46,57 @@ CREATE TABLE productos (
   precioCompra DECIMAL(10,2) NOT NULL,
   precioVenta DECIMAL(10,2) NOT NULL,
   stock INT NOT NULL,
-  proveedores_idProveedor INT NOT NULL,
-  categorias_idCategoria INT NOT NULL,
-  CONSTRAINT fk_producto_proveedor FOREIGN KEY (proveedores_idProveedor) REFERENCES proveedores(idProveedor),
-  CONSTRAINT fk_producto_categoria FOREIGN KEY (categorias_idCategoria) REFERENCES categorias(idCategoria)
+  urlImagen VARCHAR(2048),
+  proveedor_id INT,
+  categoria_id INT,
+  CONSTRAINT fk_producto_proveedor FOREIGN KEY (proveedor_id) REFERENCES proveedores (idProveedor),
+  CONSTRAINT fk_producto_categoria FOREIGN KEY (categoria_id) REFERENCES categorias (idCategoria)
 );
 
 CREATE TABLE ventas (
   idVenta INT AUTO_INCREMENT PRIMARY KEY,
-  total DECIMAL(10,2) NOT NULL,
-  estado ENUM('completada','anulada','pendiente') NOT NULL,
-  usuarios_idUsuario INT NOT NULL,
-  CONSTRAINT fk_venta_usuario FOREIGN KEY (usuarios_idUsuario) REFERENCES usuarios(idUsuario)
+  fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+  subtotal DECIMAL(10,2) NOT NULL,
+  iva DECIMAL(10,2) GENERATED ALWAYS AS (subtotal * 0.19) STORED,
+  total DECIMAL(10,2) GENERATED ALWAYS AS (subtotal + iva) STORED,
+  estado ENUM('completada','anulada','pendiente') NOT NULL DEFAULT 'pendiente',
+  metodoPago ENUM('efectivo','tarjeta','transferencia','otro') NOT NULL DEFAULT 'efectivo',
+  usuarios_id INT NOT NULL,
+  CONSTRAINT fk_venta_usuario FOREIGN KEY (usuarios_id) REFERENCES usuarios(idUsuario)
 );
 
 CREATE TABLE detalleVentas (
   idDetalleVenta INT AUTO_INCREMENT PRIMARY KEY,
-  fechaVenta DATE NOT NULL,
+  ventas_id INT NOT NULL,
+  productos_id INT NOT NULL,
   cantidad INT NOT NULL,
   precioUnitario DECIMAL(10,2) NOT NULL,
-  subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precioUnitario) STORED,
-  ventas_idVenta INT NOT NULL,
-  productos_idProducto INT NOT NULL,
-  CONSTRAINT fk_detalleVenta_venta FOREIGN KEY (ventas_idVenta) REFERENCES ventas(idVenta),
-  CONSTRAINT fk_detalleVenta_producto FOREIGN KEY (productos_idProducto) REFERENCES productos(idProducto)
+  CONSTRAINT fk_detalleVenta_venta FOREIGN KEY (ventas_id) REFERENCES ventas(idVenta),
+  CONSTRAINT fk_detalleVenta_producto FOREIGN KEY (productos_id) REFERENCES productos(idProducto)
 );
 
 CREATE TABLE compras (
   idCompra INT AUTO_INCREMENT PRIMARY KEY,
-  total DECIMAL(10,2) NOT NULL,
-  estado ENUM('completada','anulada','pendiente') NOT NULL,
-  empleados_idEmpleado INT NOT NULL,
-  proveedores_idProveedor INT NOT NULL,
-  CONSTRAINT fk_compra_usuario FOREIGN KEY (empleados_idEmpleado) REFERENCES usuarios(idUsuario),
-  CONSTRAINT fk_compra_proveedor FOREIGN KEY (proveedores_idProveedor) REFERENCES proveedores(idProveedor)
+  fecha DATETIME NOT NULL DEFAULT NOW(),
+  subtotal DECIMAL(10,2) NOT NULL,
+  iva DECIMAL(10,2) GENERATED ALWAYS AS (subtotal * 0.19) STORED,
+  total DECIMAL(10,2) GENERATED ALWAYS AS (subtotal + iva) STORED,
+  estado ENUM('completada','anulada','pendiente') NOT NULL DEFAULT 'pendiente',
+  metodoPago ENUM('efectivo','tarjeta','transferencia','otro') NOT NULL DEFAULT 'efectivo',
+  empleados_id INT NOT NULL,
+  proveedores_id INT NOT NULL,
+  CONSTRAINT fk_compra_usuario FOREIGN KEY (empleados_id) REFERENCES usuarios(idUsuario),
+  CONSTRAINT fk_compra_proveedor FOREIGN KEY (proveedores_id) REFERENCES proveedores(idProveedor)
 );
 
 CREATE TABLE detalleCompras (
-  idDetalle INT AUTO_INCREMENT PRIMARY KEY,
-  fechaCompra DATE NOT NULL,
-  cantidad INT NOT NULL,
+  idDetalleCompra INT AUTO_INCREMENT PRIMARY KEY,
+  compras_id INT NOT NULL,
+  productos_id INT NOT NULL,
+  cantidad INT NOT NULL DEFAULT 1,
   precioUnitario DECIMAL(10,2) NOT NULL,
-  subtotal DECIMAL(10,2) GENERATED ALWAYS AS (cantidad * precioUnitario) STORED,
-  compras_idCompra INT NOT NULL,
-  productos_idProducto INT NOT NULL,
-  CONSTRAINT fk_detalleCompra_compra FOREIGN KEY (compras_idCompra) REFERENCES compras(idCompra),
-  CONSTRAINT fk_detalleCompra_producto FOREIGN KEY (productos_idProducto) REFERENCES productos(idProducto)
+  CONSTRAINT fk_detalleCompra_compra FOREIGN KEY (compras_id) REFERENCES compras(idCompra),
+  CONSTRAINT fk_detalleCompra_producto FOREIGN KEY (productos_id) REFERENCES productos(idProducto)
 );
 
 CREATE TABLE salarios (
@@ -106,15 +104,6 @@ CREATE TABLE salarios (
   salarioBase DECIMAL(10,2) NOT NULL,
   bonificacion DECIMAL(10,2) NOT NULL,
   deduccion DECIMAL(10,2) NOT NULL,
-  usuarios_idUsuario INT NOT NULL,
-  CONSTRAINT fk_salario_usuario FOREIGN KEY (usuarios_idUsuario) REFERENCES usuarios(idUsuario)
-);
-
-CREATE TABLE metodosPago (
-  idMetodosPago INT AUTO_INCREMENT PRIMARY KEY,
-  opcionesPago ENUM('efectivo','tarjeta','transferencia','otro') NOT NULL,
-  ventas_idVenta INT,
-  compras_idCompra INT,
-  CONSTRAINT fk_metodoPago_venta FOREIGN KEY (ventas_idVenta) REFERENCES ventas(idVenta),
-  CONSTRAINT fk_metodoPago_compra FOREIGN KEY (compras_idCompra) REFERENCES compras(idCompra)
+  usuarios_id INT NOT NULL,
+  CONSTRAINT fk_salario_usuario FOREIGN KEY (usuarios_id) REFERENCES usuarios(idUsuario)
 );

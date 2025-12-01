@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Compras</title>
+    <link rel="stylesheet" href="../css/gestionarVentas.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="encabezado">
+        <div class="menu-icono" id="menuBtn">
+            <i class="bi bi-list"></i>
+        </div>
+        <div class="usuario">
+            <i class="bi bi-person-circle"></i>
+            <span id="nombreUsuario">Usuario</span>
+        </div>
+        <div class="cerrarSesion">
+            <a href="../html/index.html">Cerrar Sesion
+                <i class="bi bi-box-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h1 id="parte1">Inova</h1><h1 id="parte2">X</h1>
+        </div>
+        <ul>
+            <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
+            <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
+            <li><a href="../html/gestionarProveedor.html">Gestionar Proveedores</a></li>
+            <li><a href="../html/gestionarProductos.html">Gestionar Productos</a></li>
+            <li><a href="../html/gestionarVentas.html">Gestionar Ventas</a></li>
+            <li><a href="../html/gestionarCompras.html">Gestionar Compras</a></li>
+            <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
+        </ul>
+    </div>
+    <div id="overlay" class="overlay"></div>
+    <div class="contenedor-tabla">
+        <h2>LISTA DE COMPRAS</h2>
+        <button id="openAddModalBtn">+ Registrar Compra</button>
+        <table cellspacing="0" cellpadding="10" id="tablaProducto">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Proveedor</th>
+                    <th>Registrado Por</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody"></tbody>
+        </table>
+    </div>
+    <!--Modal para Agregar Compra -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span id="closeAddModal" class="close">&times;</span>
+            <h2>Nueva Compra</h2>
+            <form id="addForm">
+                <!-- CABECERA: Empleado y Método Pago -->
+                <div class="fila-flexible">
+                    <div class="grupo-input">
+                        <label for="selectProveedor">Proveedor:</label>
+                        <select id="selectProveedor" required>
+                            <option value="" disabled selected>Cargando...</option>
+                        </select>
+                    </div>
+                    <div class="grupo-input">
+                         <label for="selectUsuario">Empleado (Resp):</label>
+                         <select id="selectUsuario" required></select>
+                    </div>
+                </div>
+                <div class="fila-flexible" style="margin-top: 10px;">
+                    <div class="grupo-input">
+                        <label for="selectMetodoPago">Método de Pago:</label>
+                        <select id="selectMetodoPago" required>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="tarjeta">Tarjeta</option>
+                            <option value="transferencia">Transferencia</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                <hr class="separador">
+                <div class="seccion-agregar">
+                    <h4>Productos a Comprar</h4>
+                    <div class="grupo-input">
+                        <label for="inputBuscarProducto">Buscar:</label>
+                        <input type="text" id="inputBuscarProducto" placeholder="Filtrar por nombre...">
+                    </div>
+                    <div class="fila-agregar-producto">
+                        <div class="grupo-producto">
+                            <label>Producto:</label>
+                            <select id="selectProducto">
+                                <option value="" disabled selected>Seleccionar...</option>
+                            </select>
+                        </div>
+                        <div class="grupo-cantidad">
+                            <label>Cant:</label>
+                            <input type="number" id="inputCantidad" value="1" min="1">
+                        </div>
+                        <div class="grupo-cantidad">
+                            <label>Costo U.:</label>
+                            <input type="number" id="inputCosto" step="0.01" min="0" placeholder="Auto">
+                        </div>
+                        <div class="grupo-boton">
+                            <button type="button" id="btnAgregarTemporal" class="btn-agregar">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- TABLA DE PREVISUALIZACIÓN -->
+                <div class="contenedor-tabla-modal">
+                    <table class="tabla-modal">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Costo Unit.</th>
+                                <th>Subtotal</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaProductosBody"></tbody>
+                    </table>
+                </div>
+                <div class="resumen-venta">
+                    <h3>Total Compra: $<span id="lblSubtotal">0.00</span></h3>
+                </div>
+                <!-- BOTONES FINALES -->
+                <div class="botones-modal">
+                    <button type="button" id="btnCancelarModal" class="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Registrar Compra</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--Modal para Editar Estado Compra -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span id="closeEditModal" class="close">&times;</span>
+            <h2>Actualizar Estado</h2>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="grupo-input">
+                    <label>ID Compra:</label>
+                    <input type="text" id="lblIdCompra" disabled style="background: #f0f0f0;">
+                </div>
+                <div class="grupo-input">
+                    <label for="editEstado">Estado:</label>
+                    <select id="editEstado" required>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="completada">Completada</option>
+                        <option value="anulada">Anulada</option>
+                    </select>
+                </div>
+                <div class="botones-modal" style="margin-top: 20px;">
+                    <button type="button" id="btnCancelarEdit" class="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- MODAL DE DETALLES -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span id="closeDetailsModal" class="close">&times;</span>
+            <h2>Detalle de Compra #<span id="detailId"></span></h2>
+            <div class="fila-flexible">
+                <div><strong>Proveedor:</strong> <span id="detailProveedor"></span></div>
+                <div><strong>Responsable:</strong> <span id="detailEmpleado"></span></div>
+                <div><strong>Fecha:</strong> <span id="detailFecha"></span></div>
+                <div><strong>Estado:</strong> <span id="detailEstado"></span></div>
+            </div>
+            <div class="contenedor-tabla-modal">
+                <table class="tabla-modal">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Costo Unit.</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody"></tbody>
+                </table>
+            </div>
+            <div>
+                <p>Subtotal: <strong>$<span id="detailSubtotal">0.00</span></strong></p>
+                <p>IVA: <strong>$<span id="detailIva">0.00</span></strong></p>
+                <p>Total: <strong>$<span id="detailTotal">0.00</span></strong></p>
+            </div>
+            <div class="botones-modal">
+                <button type="button" id="btnCloseDetailsBtn" class="btn-cancelar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Mensaje (Reemplazo de Alerts) -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <h2 id="msgTitle">Título</h2>
+            <p id="msgText">Mensaje...</p>
+            <button type="button" id="msgBtnOk">Aceptar</button>
+        </div>
+    </div>
+    <script src="../js/verificarToken.js"></script>
+    <script src="../js/modalsCompras.js"></script>
+    <script src="../js/sidebar.js"></script>
+</body>
+</html>
