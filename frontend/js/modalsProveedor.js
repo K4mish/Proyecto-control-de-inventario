@@ -3,9 +3,23 @@ const API_URL_CATEGORIAS = "http://localhost:3000/api/categorias";
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!token) {
-        alert('No has iniciado sesión');
-        throw new Error('Token no encontrado');
+        window.location.href = "../html/index.html";
+        return;
     }
+
+    // --- LÓGICA MODAL MENSAJES ---
+    const msgModal = document.getElementById('messageModal');
+    const msgTitle = document.getElementById('msgTitle');
+    const msgText = document.getElementById('msgText');
+    const msgBtnOk = document.getElementById('msgBtnOk');
+
+    function mostrarMensaje(titulo, mensaje) {
+        msgTitle.textContent = titulo;
+        msgTitle.style.color = titulo.toLowerCase().includes('error') ? '#e84118' : '#273c75';
+        msgText.textContent = mensaje;
+        msgModal.style.display = 'flex';
+    }
+    if(msgBtnOk) msgBtnOk.addEventListener('click', () => msgModal.style.display = 'none');
 
     const tableBody = document.getElementById("providerTableBody");
     const addModal = document.getElementById("addModal");
@@ -15,66 +29,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeAddModal = document.getElementById("closeAddModal");
     const closeEditModal = document.getElementById("closeEditModal");
     const openAddModalBtn = document.getElementById("openAddModalBtn");
-
     const contactModal = document.getElementById("contactModal");
-    const contactName = document.getElementById("contactName");
-    const contactPhone = document.getElementById("contactPhone");
-    const contactEmail = document.getElementById("contactEmail");
     const closeContactModal = document.getElementById("closeContactModal");
-
     const addCategoria = document.getElementById("addCategoria");
     const editCategoria = document.getElementById("editCategoria");
 
-    // Cargar categoria en los select
     let categoriasMap = {};
     async function loadCategorias() {
         try {
-            const res = await fetch(API_URL_CATEGORIAS, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
+            const res = await fetch(API_URL_CATEGORIAS, { headers: { "Authorization": `Bearer ${token}` } });
             const categorias = await res.json();
-
-            categoriasMap = {}; // reinicia
+            categoriasMap = {};
             categorias.forEach(cat => {
                 categoriasMap[cat.idCategoria] = cat.nombre;
-
-                // Llena selects
-                const optionAdd = document.createElement("option");
-                optionAdd.value = cat.idCategoria;
-                optionAdd.textContent = cat.nombre;
-                addCategoria.appendChild(optionAdd);
-
-                const optionEdit = document.createElement("option");
-                optionEdit.value = cat.idCategoria;
-                optionEdit.textContent = cat.nombre;
-                editCategoria.appendChild(optionEdit);
+                const optionAdd = document.createElement("option"); optionAdd.value = cat.idCategoria; optionAdd.textContent = cat.nombre; addCategoria.appendChild(optionAdd);
+                const optionEdit = document.createElement("option"); optionEdit.value = cat.idCategoria; optionEdit.textContent = cat.nombre; editCategoria.appendChild(optionEdit);
             });
-        } catch (err) {
-            console.error("Error cargando categorías:", err);
-        }
+        } catch (err) { console.error("Error cargando categorías:", err); }
     }
-    // Cargar proveedores
+
     async function loadProviders() {
         try {
-            const res = await fetch(API_URL_PROVEEDORES, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
+            const res = await fetch(API_URL_PROVEEDORES, { headers: { "Authorization": `Bearer ${token}` } });
             const proveedores = await res.json();
             tableBody.innerHTML = "";
-
             if (!Array.isArray(proveedores)) return;
-
             proveedores.forEach(p => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${p.idProveedor}</td>
-                    <td>${p.nombre}</td>
-                    <td>${p.telefono}</td>
-                    <td>${p.correo}</td>
-                    <td>${p.direccion}</td>
-                    <td>${p.ciudad}</td>
-                    <td>${p.estado}</td>
-                    <td>${categoriasMap[p.categoria_id] || "Sin categoría"}</td>
+                    <td>${p.idProveedor}</td><td>${p.nombre}</td><td>${p.telefono}</td><td>${p.correo}</td><td>${p.direccion}</td><td>${p.ciudad}</td><td>${p.estado}</td><td>${categoriasMap[p.categoria_id] || "Sin categoría"}</td>
                     <td>
                         <button onclick="openEditModal('${p.idProveedor}', '${p.nombre}', '${p.telefono}', '${p.correo}', '${p.direccion}', '${p.ciudad}', '${p.nombreContacto}', '${p.telefonoContacto}', '${p.correoContacto}', '${p.estado}', '${p.categoria_id}')"><i class="bi bi-pencil-square"></i></button>
                         <button onclick="deleteProvider(${p.idProveedor})"><i class="bi bi-trash"></i></button>
@@ -83,36 +66,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 tableBody.appendChild(row);
             });
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     }
-    // Mostrar contacto
-    function showContactModal(nombreContacto, telefonoContacto, correoContacto) {
-        contactName.textContent = nombreContacto;
-        contactPhone.textContent = telefonoContacto;
-        contactEmail.textContent = correoContacto;
+
+    window.showContactModal = function(nombre, tel, email) {
+        document.getElementById("contactName").textContent = nombre;
+        document.getElementById("contactPhone").textContent = tel;
+        document.getElementById("contactEmail").textContent = email;
         contactModal.style.display = "flex";
     }
-    closeContactModal.addEventListener("click", () => { contactModal.style.display = "none"; });
-    window.showContactModal = showContactModal;
-    // Eliminar proveedor
-    async function deleteProvider(id) {
+    if(closeContactModal) closeContactModal.addEventListener("click", () => { contactModal.style.display = "none"; });
+
+    window.deleteProvider = async function(id) {
         if (!confirm("¿Seguro que deseas eliminar este proveedor?")) return;
         try {
-            const res = await fetch(`${API_URL_PROVEEDORES}/${id}`, {
-                method: "DELETE",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            if (!res.ok) throw new Error("No se pudo eliminar el proveedor");
+            const res = await fetch(`${API_URL_PROVEEDORES}/${id}`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } });
+            if (!res.ok) throw new Error("No se pudo eliminar");
+            mostrarMensaje("Éxito", "Proveedor eliminado");
             loadProviders();
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
+        } catch (err) { mostrarMensaje("Error", err.message); }
     }
-    window.deleteProvider = deleteProvider;
-    // Modal Agregar
+
     openAddModalBtn.addEventListener("click", () => { addModal.style.display = "flex"; });
     closeAddModal.addEventListener("click", () => { addModal.style.display = "none"; });
 
@@ -132,20 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         try {
             const res = await fetch(API_URL_PROVEEDORES, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                body: JSON.stringify(nuevoProveedor)
+                method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }, body: JSON.stringify(nuevoProveedor)
             });
-            if (!res.ok) throw new Error("Error al agregar proveedor");
+            if (!res.ok) throw new Error("Error al agregar");
+            mostrarMensaje("Éxito", "Proveedor agregado");
             addModal.style.display = "none";
             addForm.reset();
             loadProviders();
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
+        } catch (err) { mostrarMensaje("Error", err.message); }
     });
-    // Modal Editar
+
     window.openEditModal = function(id, nombre, telefono, correo, direccion, ciudad, nombreContacto, telefonoContacto, correoContacto, estado, categoria_id) {
         editModal.style.display = "flex";
         document.getElementById("editId").value = id;
@@ -160,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("editEstado").value = estado;
         document.getElementById("editCategoria").value = categoria_id;
     };
-
     closeEditModal.addEventListener("click", () => { editModal.style.display = "none"; });
 
     editForm.addEventListener("submit", async (e) => {
@@ -180,18 +149,21 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         try {
             const res = await fetch(`${API_URL_PROVEEDORES}/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                body: JSON.stringify(proveedorActualizado)
+                method: "PUT", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }, body: JSON.stringify(proveedorActualizado)
             });
-            if (!res.ok) throw new Error("Error al actualizar proveedor");
+            if (!res.ok) throw new Error("Error al actualizar");
+            mostrarMensaje("Éxito", "Proveedor actualizado");
             editModal.style.display = "none";
             loadProviders();
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
+        } catch (err) { mostrarMensaje("Error", err.message); }
     });
+
+    window.onclick = (e) => {
+        if(e.target == addModal) addModal.style.display = "none";
+        if(e.target == editModal) editModal.style.display = "none";
+        if(e.target == contactModal) contactModal.style.display = "none";
+        if(e.target == msgModal) msgModal.style.display = "none";
+    }
     loadCategorias();
     loadProviders();
 });

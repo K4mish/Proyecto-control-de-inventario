@@ -1,11 +1,24 @@
 const API_URL = "http://localhost:3000/api/categorias";
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Token actual:', token);
     if (!token) {
-        alert('No has iniciado sesión. Por favor inicia sesión primero.');
-        throw new Error('Token no encontrado');
+        window.location.href = "../html/index.html";
+        return;
     }
+
+    // --- LÓGICA MODAL MENSAJES ---
+    const msgModal = document.getElementById('messageModal');
+    const msgTitle = document.getElementById('msgTitle');
+    const msgText = document.getElementById('msgText');
+    const msgBtnOk = document.getElementById('msgBtnOk');
+
+    function mostrarMensaje(titulo, mensaje) {
+        msgTitle.textContent = titulo;
+        msgTitle.style.color = titulo.toLowerCase().includes('error') ? '#e84118' : '#273c75';
+        msgText.textContent = mensaje;
+        msgModal.style.display = 'flex';
+    }
+    if(msgBtnOk) msgBtnOk.addEventListener('click', () => msgModal.style.display = 'none');
 
     const tableBody = document.getElementById("categoryTableBody");
     const addModal = document.getElementById("addModal");
@@ -16,27 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeEditModal = document.getElementById("closeEditModal");
     const openAddModalBtn = document.getElementById("openAddModalBtn");
 
-    //  CARGAR CATEGORÍAS
     async function loadCategories() {
         try {
-            const res = await fetch(API_URL, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-
+            const res = await fetch(API_URL, { headers: { "Authorization": `Bearer ${token}` } });
             const categorias = await res.json();
             tableBody.innerHTML = "";
-
-            if (!Array.isArray(categorias)) {
-                alert("Error al cargar categorías.");
-                return;
-            }
-
+            if (!Array.isArray(categorias)) return;
             categorias.forEach((c) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${c.idCategoria}</td>
-                    <td>${c.nombre}</td>
-                    <td>${c.descripcion || ''}</td>
+                    <td>${c.idCategoria}</td><td>${c.nombre}</td><td>${c.descripcion || ''}</td>
                     <td>
                         <button onclick="openEditModal('${c.idCategoria}', '${c.nombre}', '${c.descripcion || ''}')"><i class="bi bi-pencil-square"></i></button>
                         <button onclick="deleteCategory(${c.idCategoria})"><i class="bi bi-trash"></i></button>
@@ -44,96 +46,72 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 tableBody.appendChild(row);
             });
-
-        } catch (error) {
-            console.error("Error al cargar categorías:", error);
-        }
+        } catch (error) { console.error(error); }
     }
-    //  ELIMINAR CATEGORÍA
+
     async function deleteCategory(id) {
         if (confirm("¿Seguro que deseas eliminar esta categoría?")) {
-            await fetch(`${API_URL}/${id}`, {
-                method: "DELETE",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-
+            await fetch(`${API_URL}/${id}`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } });
+            mostrarMensaje("Éxito", "Categoría eliminada");
             loadCategories();
         }
     }
     window.deleteCategory = deleteCategory;
-    //  ABRIR MODAL AGREGAR
+
     openAddModalBtn.addEventListener("click", () => {addModal.style.display = "flex";});
-    // CERRAR MODAL AGREGAR
     closeAddModal.addEventListener("click", () => {addModal.style.display = "none";});
-    //  AGREGAR CATEGORÍA
+
     addForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        const nombre = document.getElementById("addCategory").value;
-        const descripcion = document.getElementById("addDescription").value;
-
-        const nuevaCategoria = { nombre, descripcion };
-
+        const nuevaCategoria = { 
+            nombre: document.getElementById("addCategory").value, 
+            descripcion: document.getElementById("addDescription").value 
+        };
         try {
             const res = await fetch(API_URL, {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` 
-                },
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify(nuevaCategoria),
             });
-
-            if (!res.ok) throw new Error("Error al crear categoría");
-
-            alert("Categoría agregada correctamente");
+            if (!res.ok) throw new Error("Error");
+            mostrarMensaje("Éxito", "Categoría agregada");
             addModal.style.display = "none";
             addForm.reset();
             loadCategories();
-
-        } catch (error) {
-            console.error(error);
-            alert("No se pudo crear la categoría");
-        }
+        } catch (error) { mostrarMensaje("Error", "No se pudo crear la categoría"); }
     });
-    //  ABRIR MODAL EDITAR
+
     window.openEditModal = function(id, nombre, descripcion) {
         editModal.style.display = "flex";
         document.getElementById("editId").value = id;
         document.getElementById("editCategory").value = nombre;
         document.getElementById("editDescription").value = descripcion;
     };
-    // CERAR MODAL EDITAR
     closeEditModal.addEventListener("click", () => {editModal.style.display = "none";});
-    //  GUARDAR EDICIÓN
+
     editForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const id = document.getElementById("editId").value;
-        const nombre = document.getElementById("editCategory").value;
-        const descripcion = document.getElementById("editDescription").value;
-
-        const categoriaActualizada = { nombre, descripcion };
-
+        const categoriaActualizada = { 
+            nombre: document.getElementById("editCategory").value, 
+            descripcion: document.getElementById("editDescription").value 
+        };
         try {
             await fetch(`${API_URL}/${id}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify(categoriaActualizada)
             });
-
-            alert("Categoría actualizada correctamente");
+            mostrarMensaje("Éxito", "Categoría actualizada");
             editModal.style.display = "none";
             loadCategories();
-
-        } catch (error) {
-            console.error(error);
-            alert("Error al actualizar categoría");
-        }
+        } catch (error) { mostrarMensaje("Error", "Error al actualizar"); }
     });
-    // Cargar al inicio
+
+    window.onclick = (e) => {
+        if(e.target == msgModal) msgModal.style.display = "none";
+        if(e.target == addModal) addModal.style.display = "none";
+        if(e.target == editModal) editModal.style.display = "none";
+    }
     loadCategories();
 });

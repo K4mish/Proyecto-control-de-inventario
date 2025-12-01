@@ -4,43 +4,47 @@ const API_URL_CATEGORIAS = "http://localhost:3000/api/categorias";
 
 document.addEventListener('DOMContentLoaded', () => {
     const rolUsuario = localStorage.getItem('rol');
-    // Verificar Token
     if (!token){
-        alert('No has iniciado sesión.');
         window.location.href = "../html/index.html";
         return;
     }
-    // Lógica específica de Rol (Visual)
+
+    // --- LÓGICA MODAL MENSAJES ---
+    const msgModal = document.getElementById('messageModal');
+    const msgTitle = document.getElementById('msgTitle');
+    const msgText = document.getElementById('msgText');
+    const msgBtnOk = document.getElementById('msgBtnOk');
+
+    function mostrarMensaje(titulo, mensaje) {
+        msgTitle.textContent = titulo;
+        msgTitle.style.color = titulo.toLowerCase().includes('error') ? '#e84118' : '#273c75';
+        msgText.textContent = mensaje;
+        msgModal.style.display = 'flex';
+    }
+    if(msgBtnOk) msgBtnOk.addEventListener('click', () => msgModal.style.display = 'none');
+
     if (rolUsuario === 'empleado'){
         const btnAgregar = document.getElementById("openAddModalBtn");
         if (btnAgregar) btnAgregar.style.display = 'none';
-        
         const thCompra = document.getElementById("thPrecioCompra");
         const thAcciones = document.getElementById("thAcciones");
         if (thCompra) thCompra.style.display = 'none';
         if (thAcciones) thAcciones.style.display = 'none';
     }
 
-    // --- REFERENCIAS DOM ---
     const tableBody = document.getElementById("productTableBody");
-    // Modal Agregar
     const addModal = document.getElementById("addModal");
     const addForm = document.getElementById("addForm");
     const openAddModalBtn = document.getElementById("openAddModalBtn");
     const closeAddModal = document.getElementById("closeAddModal");
-    const btnCancelAdd = document.getElementById("btnCancelAdd");
-    // Modal Editar
     const editModal = document.getElementById("editModal");
     const editForm = document.getElementById("editForm");
     const closeEditModal = document.getElementById("closeEditModal");
-    const btnCancelEdit = document.getElementById("btnCancelEdit");
-    // Selects
-    const addCategoria = document.getElementById("addCategory");
+    const addCategoria = document.getElementById("addCategoria");
     const addProveedor = document.getElementById("addProvider");
     const editCategoria = document.getElementById("editCategory");
     const editProveedor = document.getElementById("editProvider");
 
-    // CARGAR SELECTS
     async function loadSelects(){
         try {
             const resCat = await fetch(API_URL_CATEGORIAS, { headers: { "Authorization": `Bearer ${token}` } });
@@ -52,15 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if(addProveedor) fillSelect(addProveedor, proveedores, 'idProveedor', 'nombre');
             if(editCategoria) fillSelect(editCategoria, categorias, 'idCategoria', 'nombre');
             if(editProveedor) fillSelect(editProveedor, proveedores, 'idProveedor', 'nombre');
-
-        } catch (err){
-            console.error("Error cargando listas desplegables:", err);
-        }
+        } catch (err){ console.error(err); }
     }
 
     function fillSelect(selectElement, data, keyId, keyName) {
         const lista = Array.isArray(data) ? data : (data.categorias || data.proveedores || []);
-        
         selectElement.innerHTML = `<option value="">Seleccionar...</option>`;
         lista.forEach(item => {
             const opt = document.createElement("option");
@@ -69,21 +69,17 @@ document.addEventListener('DOMContentLoaded', () => {
             selectElement.appendChild(opt);
         });
     }
-    // CARGAR PRODUCTOS (TABLA)
+
     async function loadProducts(){
         try {
             const res = await fetch(API_URL, { headers: { "Authorization": `Bearer ${token}` } });
             const data = await res.json();
-            
             const products = data.productos || data;
-            if(Array.isArray(products)) {
-                products.sort((a, b) => b.idProducto - a.idProducto);
-            }
             
+            if(Array.isArray(products)) products.sort((a, b) => b.idProducto - a.idProducto);
             if(tableBody) tableBody.innerHTML = "";
 
             if (!Array.isArray(products)){
-                console.error("Respuesta no válida:", data);
                 return;
             }
 
@@ -91,32 +87,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement("tr");
                  let htmlRow = `
                     <td>${p.idProducto}</td>
-                    <td>
-                        <img src="${p.urlImagen || '../assets/no-image.png'}" class="img-producto" alt="Img">
-                    </td>
+                    <td><img src="${p.urlImagen || '../assets/no-image.png'}" class="img-producto" alt="Img"></td>
                     <td><strong>${p.nombre}</strong></td>
                     <td>${p.nombreCategoria || "Sin categoría"}</td>
                     <td>${p.nombreProveedor || "Sin proveedor"}</td>
                     <td>$${parseFloat(p.precioVenta).toFixed(2)}</td>
                 `;
-
                 if (rolUsuario === 'admin'){
                     htmlRow += `
                         <td>$${parseFloat(p.precioCompra).toFixed(2)}</td>
                         <td>${p.stock}</td>
                         <td>
-                            <button class="editBtn" data-id="${p.idProducto}" title="Editar">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                            <button class="deleteBtn" data-id="${p.idProducto}" title="Eliminar">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                            <button class="editBtn" data-id="${p.idProducto}"><i class="bi bi-pencil-square"></i></button>
+                            <button class="deleteBtn" data-id="${p.idProducto}"><i class="bi bi-trash"></i></button>
                         </td>
                     `;
                 } else {
-                    htmlRow += `
-                        <td>${p.stock}</td>
-                    `;
+                    htmlRow += `<td>${p.stock}</td>`;
                 }
                 row.innerHTML = htmlRow;
                 tableBody.appendChild(row);
@@ -133,16 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.addEventListener("click", () => deleteProduct(btn.dataset.id));
                 });
             }
-
-        } catch (err) {
-            console.error("Error al cargar productos:", err);
-        }
+        } catch (err) { console.error(err); }
     }
-    // CREAR PRODUCTO
+
     if(addForm) {
         addForm.addEventListener("submit", async e => {
             e.preventDefault();
-
             const nuevoProducto = {
                 nombre: document.getElementById("addName").value,
                 categoria_id: document.getElementById("addCategory").value,
@@ -155,26 +138,22 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await fetch(API_URL, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                     body: JSON.stringify(nuevoProducto)
                 });
-
                 if (res.ok){
-                    alert("Producto creado exitosamente");
+                    mostrarMensaje("Éxito", "Producto creado exitosamente");
                     addModal.style.display = "none";
                     addForm.reset();
                     loadProducts();
                 } else{
                     const txt = await res.text();
-                    alert("Error: " + txt);
+                    mostrarMensaje("Error", "Error: " + txt);
                 }
-            } catch (err){ console.error(err); }
+            } catch (err){ mostrarMensaje("Error", "Error de conexión"); }
         });
     }
-    // EDITAR PRODUCTO
+
     function openEditModal(p) {
         if(!editModal) return;
         document.getElementById("editId").value = p.idProducto;
@@ -192,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
         editForm.addEventListener("submit", async e => {
             e.preventDefault();
             const id = document.getElementById("editId").value;
-
             const productoActualizado = {
                 nombre: document.getElementById("editName").value,
                 categoria_id: document.getElementById("editCategory").value,
@@ -205,61 +183,45 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await fetch(`${API_URL}/${id}`, {
                     method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                     body: JSON.stringify(productoActualizado)
                 });
-
                 if (res.ok){
-                    alert("Producto actualizado");
+                    mostrarMensaje("Éxito", "Producto actualizado");
                     editModal.style.display = "none";
                     loadProducts();
                 } else{
-                    alert("Error al actualizar");
+                    mostrarMensaje("Error", "Error al actualizar");
                 }
             } catch (err){ console.error(err); }
         });
     }
-    // ELIMINAR PRODUCTO
+
     async function deleteProduct(id){
         if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
-        
         try {
             const res = await fetch(`${API_URL}/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
-
             if (res.ok){
-                alert("Producto eliminado");
+                mostrarMensaje("Éxito", "Producto eliminado");
                 loadProducts();
             } else{                
                 const txt = await res.text();
-                alert("Error (Puede que tenga ventas asociadas): " + txt);
+                mostrarMensaje("Error", "Error: " + txt);
             }
         } catch (err){ console.error(err); }
     }
-    // CONTROLES DE MODALES
-    const cerrarModal = (modal) => { if(modal) modal.style.display = "none"; };
 
-    if (openAddModalBtn) {
-        openAddModalBtn.addEventListener("click", () => {
-            if(addForm) addForm.reset();
-            if(addModal) addModal.style.display = "flex";
-        });
-    }
-
-    if (closeAddModal) closeAddModal.addEventListener("click", () => cerrarModal(addModal));
-    if (btnCancelAdd) btnCancelAdd.addEventListener("click", () => cerrarModal(addModal));
-    
-    if (closeEditModal) closeEditModal.addEventListener("click", () => cerrarModal(editModal));
-    if (btnCancelEdit) btnCancelEdit.addEventListener("click", () => cerrarModal(editModal));
+    if (openAddModalBtn) openAddModalBtn.addEventListener("click", () => { if(addForm) addForm.reset(); if(addModal) addModal.style.display = "flex"; });
+    if (closeAddModal) closeAddModal.addEventListener("click", () => { if(addModal) addModal.style.display = "none"; });
+    if (closeEditModal) closeEditModal.addEventListener("click", () => { if(editModal) editModal.style.display = "none"; });
 
     window.addEventListener("click", (e) => {
-        if (addModal && e.target === addModal) cerrarModal(addModal);
-        if (editModal && e.target === editModal) cerrarModal(editModal);
+        if (addModal && e.target === addModal) addModal.style.display = "none";
+        if (editModal && e.target === editModal) editModal.style.display = "none";
+        if (msgModal && e.target === msgModal) msgModal.style.display = "none";
     });
     loadSelects();
     loadProducts();

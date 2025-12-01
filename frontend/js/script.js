@@ -2,14 +2,34 @@ const container = document.querySelector('.container');
 const registerBtn = document.querySelector('.register-btn');
 const loginBtn = document.querySelector('.login-btn');
 
-registerBtn.addEventListener('click', () => {
-    container.classList.add('active');
-})
+registerBtn.addEventListener('click', () => { container.classList.add('active'); })
+loginBtn.addEventListener('click', () => { container.classList.remove('active'); })
 
-loginBtn.addEventListener('click', () => {
-    container.classList.remove('active');
-})
-// Manejo del formulario de inicio de sesión
+// --- MODAL DE MENSAJES (REEMPLAZO DE ALERTS) ---
+const msgModal = document.getElementById('messageModal');
+const msgTitle = document.getElementById('msgTitle');
+const msgText = document.getElementById('msgText');
+const msgBtnOk = document.getElementById('msgBtnOk');
+
+function mostrarMensaje(titulo, texto) {
+    msgTitle.textContent = titulo;
+    msgText.textContent = texto;
+    
+    if (titulo.toLowerCase().includes('error') || titulo.toLowerCase().includes('atención')) {
+        msgTitle.style.color = '#e84118';
+    } else {
+        msgTitle.style.color = '#64b055';
+    }
+
+    msgModal.style.display = 'flex';
+    setTimeout(() => { msgModal.classList.add('active'); }, 10);
+}
+// Cerrar modal de mensaje
+msgBtnOk.addEventListener('click', () => {
+    msgModal.classList.remove('active');
+    setTimeout(() => { msgModal.style.display = 'none'; }, 300);
+});
+// --- LÓGICA LOGIN ---
 document.getElementById("formLogin").addEventListener("submit", async(e) => {
     e.preventDefault();
     const correo = document.getElementById("correo").value;
@@ -22,22 +42,27 @@ document.getElementById("formLogin").addEventListener("submit", async(e) => {
             body: JSON.stringify({ correo, contrasena })
         });
         const data = await response.json();
-        alert(data.mensaje);
-        if (data.token){
+        
+        if (response.ok && data.token) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('rol', data.rol);
-            window.location.href = '../html/vistaGeneral.html';
+            mostrarMensaje("Bienvenido", data.mensaje);
+            msgBtnOk.onclick = () => {
+                window.location.href = '../html/vistaGeneral.html';
+            };
+        } else {
+            mostrarMensaje("Error", data.mensaje || "Credenciales incorrectas");
         }
     } catch (error) {
         console.error("Error:", error);
-        alert("Error al conectar con el servidor");
+        mostrarMensaje("Error", "Error al conectar con el servidor");
     }
 });
-// Manejo del formulario de registro
+// --- LÓGICA REGISTRO ---
 document.getElementById("formRegister").addEventListener("submit", async(e) => {
     e.preventDefault();
 
-     const usuarioRegistro = document.getElementById("usuarioRegistro").value.trim();
+    const usuarioRegistro = document.getElementById("usuarioRegistro").value.trim();
     const correoRegistro = document.getElementById("correoRegistro").value;
     const contrasenaRegistro = document.getElementById("contrasenaRegistro").value;
     const cedulaRegistro = document.getElementById("cedulaRegistro").value;
@@ -57,51 +82,53 @@ document.getElementById("formRegister").addEventListener("submit", async(e) => {
             })
         });
         const data = await response.json();
+        
         if (response.ok){
-            alert(data.mensaje);
+            mostrarMensaje("Registro Exitoso", data.mensaje);
             document.getElementById("formRegister").reset();
-            container.classList.remove('active'); 
+            msgBtnOk.onclick = () => {
+                msgModal.classList.remove('active');
+                setTimeout(() => { msgModal.style.display = 'none'; }, 300);
+                container.classList.remove('active');
+            };
         } else {
-            alert(data.mensaje || 'Error en el registro');
+            mostrarMensaje("Error en Registro", data.mensaje || 'No se pudo registrar');
         }
     } catch (error) {
         console.error(error);
-        alert("Error en el servidor");
+        mostrarMensaje("Error", "Error en el servidor");
     }
 });
-// --- LÓGICA DEL MODAL DE RECUPERACIÓN (NUEVO) ---
+// --- LÓGICA MODAL RECUPERAR CONTRASEÑA ---
 const forgotModal = document.getElementById('forgotModal');
 const forgotBtn = document.getElementById('forgotBtn');
 const closeForgot = document.querySelector('.close-forgot');
 
-// Abrir modal
 forgotBtn.addEventListener('click', (e) => {
     e.preventDefault();
     forgotModal.style.display = 'flex';
-    setTimeout(() => {
-        forgotModal.classList.add('active');
-    }, 10);
+    setTimeout(() => { forgotModal.classList.add('active'); }, 10);
 });
-// Función para cerrar modal
+
 function cerrarModalForgot() {
     forgotModal.classList.remove('active');
-    setTimeout(() => {
-        forgotModal.style.display = 'none';
-    }, 300);
+    setTimeout(() => { forgotModal.style.display = 'none'; }, 300);
 }
-// Cerrar con la X
+
 closeForgot.addEventListener('click', cerrarModalForgot);
-// Cerrar si se hace clic fuera del contenido blanco
 window.addEventListener('click', (e) => {
-    if (e.target === forgotModal) {
-        cerrarModalForgot();
-    }
+    if (e.target === forgotModal) cerrarModalForgot();
 });
-// Manejo del envío del formulario de recuperación
+// --- ENVÍO FORMULARIO RECUPERACIÓN ---
 document.getElementById("formRecovery").addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("emailRecovery").value;
-    // Simulación por ahora:
-    alert(`Se ha enviado un código de recuperación a: ${email}`);
     cerrarModalForgot();
+    setTimeout(() => {
+        mostrarMensaje("Correo Enviado", `Se ha enviado un código de recuperación a: ${email}`);
+        msgBtnOk.onclick = () => {
+            msgModal.classList.remove('active');
+            setTimeout(() => { msgModal.style.display = 'none'; }, 300);
+        };
+    }, 350);
 });

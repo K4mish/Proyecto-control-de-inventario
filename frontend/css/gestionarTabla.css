@@ -239,3 +239,26 @@ form button[type="button"]:hover,
     background-color: #545b62; 
 }
 .clearfix::after { content: ""; clear: both; display: table; }
+
+/* ==== MODAL DE MENSAJES (Alertas Personalizadas) ==== */
+#messageModal .modal-content {
+    width: 350px;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+#messageModal p {
+    font-size: 16px;
+    color: #333;
+    margin: 20px 0;
+}
+
+#messageModal button {
+    background-color: #00a8ff;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#messageModal button:hover {
+    background-color: #008ecc;
+}
