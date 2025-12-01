@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>$${parseFloat(c.total).toFixed(2)}</td>
                     <td><span class="badge-estado">${c.estado}</span></td>
                     <td>
-                        <button class="btn-detalles" data-id="${c.idCompra}"><i class="bi bi-eye"></i></button>
+                        <button class="btn-detalles" data-id="${c.idCompra}"><i class="bi bi-eye"></i>Detalles</button>
                         <button class="editBtn" data-id="${c.idCompra}"><i class="bi bi-pencil-square"></i></button>
                     </td>
                 `;

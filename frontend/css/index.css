@@ -250,3 +250,70 @@ form{ width: 100%; }
 
     .toggle-panel h1{font-size: 30px; }
 }
+
+/* ==== ESTILOS DEL MODAL DE RECUPERACIÓN ==== */
+
+.modal-forgot {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Clase para activar la animación de entrada */
+.modal-forgot.active {
+    opacity: 1;
+}
+
+.modal-content-forgot {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.modal-forgot.active .modal-content-forgot {
+    transform: scale(1);
+}
+
+.modal-content-forgot h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.modal-content-forgot p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Botón de cerrar (X) */
+.close-forgot {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-forgot:hover {
+    color: #64b055;
+}

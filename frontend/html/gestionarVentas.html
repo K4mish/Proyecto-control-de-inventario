@@ -87,12 +87,10 @@
                 <!-- SECCIÓN: Buscador y Agregar -->
                 <div class="seccion-agregar">
                     <h4>Agregar Productos</h4>
-
                     <div class="grupo-input">
-                        <label for="inputBuscarProducto">Buscar:</label>
+                        <label for="inputBuscarProducto">Buscar Producto:</label>
                         <input type="text" id="inputBuscarProducto" placeholder="Filtrar por nombre...">
                     </div>
-
                     <div class="fila-agregar-producto">
                         <div class="grupo-producto">
                             <label>Producto:</label>
@@ -105,6 +103,7 @@
                             <input type="number" id="inputCantidad" value="1" min="1">
                         </div>
                         <div class="grupo-boton">
+                            <label>&nbsp;</label>
                             <button type="button" id="btnAgregarTemporal" class="btn-agregar">+</button>
                         </div>
                     </div>
@@ -124,7 +123,6 @@
                         <tbody id="tablaProductosBody"></tbody>
                     </table>
                 </div>
-
                 <div class="resumen-venta">
                     <h3>Total Venta: $<span id="lblSubtotal">0.00</span></h3>
                 </div>
@@ -143,12 +141,10 @@
             <h2>Actualizar Estado de Venta</h2>
             <form id="editForm">
                 <input type="hidden" id="editId">
-                
                 <div class="grupo-input">
                     <label>ID Venta:</label>
                     <input type="text" id="lblIdVenta" disabled style="background: #f0f0f0;">
                 </div>
-
                 <div class="grupo-input">
                     <label for="editEstado">Estado:</label>
                     <select id="editEstado" required>
@@ -157,7 +153,6 @@
                         <option value="anulada">Anulada</option>
                     </select>
                 </div>
-
                 <div class="botones-modal" style="margin-top: 20px;">
                     <button type="button" id="btnCancelarEdit" class="btn-cancelar">Cancelar</button>
                     <button type="submit" class="btn-guardar">Guardar Cambios</button>
@@ -169,7 +164,6 @@
     <div id="detailsModal" class="modal">
         <div class="modal-content">
             <span id="closeDetailsModal" class="close">&times;</span>
-
             <h2>Detalle de Venta #<span id="detailId"></span></h2>
             <!-- Cabecera Informativa -->
             <div class="fila-flexible">
@@ -186,7 +180,6 @@
                     <strong>Estado:</strong> <span id="detailEstado"></span>
                 </div>
             </div>
-
             <!-- Tabla de Productos de esa venta -->
             <div class="contenedor-tabla-modal">
                 <table class="tabla-modal">
@@ -198,19 +191,15 @@
                             <th>Total</th>
                         </tr>
                     </thead>
-                    <tbody id="detailsTableBody">
-                        <!-- Se llena con JS -->
-                    </tbody>
+                    <tbody id="detailsTableBody"></tbody>
                 </table>
             </div>
-
             <!-- Totales -->
             <div>
                 <p>Subtotal: <strong>$<span id="detailSubtotal">0.00</span></strong></p>
                 <p>IVA (19%): <strong>$<span id="detailIva">0.00</span></strong></p>
                 <p>Total: <strong>$<span id="detailTotal">0.00</span></strong></p>
             </div>
-
             <div class="botones-modal">
                 <button type="button" id="btnCloseDetailsBtn" class="btn-cancelar">Cerrar</button>
             </div>

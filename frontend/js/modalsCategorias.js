@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${c.nombre}</td>
                     <td>${c.descripcion || ''}</td>
                     <td>
-                        <button onclick="openEditModal('${c.idCategoria}', '${c.nombre}', '${c.descripcion || ''}')">Editar</button>
-                        <button onclick="deleteCategory(${c.idCategoria})">Eliminar</button>
+                        <button onclick="openEditModal('${c.idCategoria}', '${c.nombre}', '${c.descripcion || ''}')"><i class="bi bi-pencil-square"></i></button>
+                        <button onclick="deleteCategory(${c.idCategoria})"><i class="bi bi-trash"></i></button>
                     </td>
                 `;
                 tableBody.appendChild(row);

@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${p.estado}</td>
                     <td>${categoriasMap[p.categoria_id] || "Sin categoría"}</td>
                     <td>
-                        <button onclick="openEditModal('${p.idProveedor}', '${p.nombre}', '${p.telefono}', '${p.correo}', '${p.direccion}', '${p.ciudad}', '${p.nombreContacto}', '${p.telefonoContacto}', '${p.correoContacto}', '${p.estado}', '${p.categoria_id}')">Editar</button>
-                        <button onclick="deleteProvider(${p.idProveedor})">Eliminar</button>
-                        <button onclick="showContactModal('${p.nombreContacto}','${p.telefonoContacto}','${p.correoContacto}')">Contacto</button>
+                        <button onclick="openEditModal('${p.idProveedor}', '${p.nombre}', '${p.telefono}', '${p.correo}', '${p.direccion}', '${p.ciudad}', '${p.nombreContacto}', '${p.telefonoContacto}', '${p.correoContacto}', '${p.estado}', '${p.categoria_id}')"><i class="bi bi-pencil-square"></i></button>
+                        <button onclick="deleteProvider(${p.idProveedor})"><i class="bi bi-trash"></i></button>
+                        <button onclick="showContactModal('${p.nombreContacto}','${p.telefonoContacto}','${p.correoContacto}')"><i class="bi bi-person-circle"></i></button>
                     </td>
                 `;
                 tableBody.appendChild(row);

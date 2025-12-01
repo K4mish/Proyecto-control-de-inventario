@@ -9,25 +9,13 @@
 </head>
 <body>
     <div class="encabezado">
-        <div class="menu-icono" id="menuBtn">
-            <i class="bi bi-list"></i>
-        </div>
-
-        <div class="usuario">
-            <i class="bi bi-person-circle"></i>
-            <span id="nombreUsuario">Usuario</span>
-        </div>
-        <div class="cerrarSesion">
-            <a href="../html/index.html">Cerrar Sesion
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
+        <div class="menu-icono" id="menuBtn"><i class="bi bi-list"></i></div>
+        <div class="usuario"><i class="bi bi-person-circle"></i><span id="nombreUsuario">Usuario</span></div>
+        <div class="cerrarSesion"><a href="../html/index.html">Cerrar Sesion <i class="bi bi-box-arrow-right"></i></a></div>
     </div>
 
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h1 id="parte1">Inova</h1><h1 id="parte2">X</h1>
-        </div>
+        <div class="sidebar-header"><h1 id="parte1">Inova</h1><h1 id="parte2">X</h1></div>
         <ul>
             <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
             <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
@@ -38,12 +26,13 @@
             <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
         </ul>
     </div>
-
     <div id="overlay" class="overlay"></div>
 
     <div class="contenedor-tabla">
         <h2>LISTA DE PROVEEDORES</h2>
-        <button id="openAddModalBtn">+ Agregar Proveedor</button>
+        <div class="clearfix">
+            <button id="openAddModalBtn">+ Agregar Proveedor</button>
+        </div>
         <table cellspacing="0" cellpadding="10" id="tablaProveedor">
             <thead>
                 <tr>
@@ -51,74 +40,92 @@
                     <th>Nombre</th>
                     <th>Teléfono</th>
                     <th>Correo</th>
-                    <th>Dirección</th>
+                    <th>Direccion</th>
                     <th>Ciudad</th>
                     <th>Estado</th>
-                    <th>Tipo</th>
+                    <th>Categoria</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="providerTableBody"></tbody>
         </table>
     </div>
-    <!-- Modal Agregar Proveedor -->
+    <!-- Modal Agregar -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h2>Agregar Proveedor</h2>
             <form id="addForm">
-                <input type="text" id="addNombre" placeholder="Nombre" required>
-                <input type="text" id="addTelefono" placeholder="Teléfono" required>
-                <input type="email" id="addCorreo" placeholder="Correo" required>
-                <input type="text" id="addDireccion" placeholder="Dirección" required>
-                <input type="text" id="addCiudad" placeholder="Ciudad" required>
-                <input type="text" id="addNombreContacto" placeholder="Nombre Contacto" required>
-                <input type="text" id="addTelefonoContacto" placeholder="Teléfono Contacto" required>
-                <input type="email" id="addCorreoContacto" placeholder="Correo Contacto" required>
+                <label>Nombre Empresa:</label>
+                <input type="text" id="addNombre" required>
+                <label>Teléfono Empresa:</label>
+                <input type="text" id="addTelefono" required>
+                <label>Correo Empresa:</label>
+                <input type="email" id="addCorreo" required>
+                <label>Dirección:</label>
+                <input type="text" id="addDireccion" required>
+                <label>Ciudad:</label>
+                <input type="text" id="addCiudad" required>
+                <label>Categoría:</label>
+                <select id="addCategoria" required>
+                    <option value="">Selecciona categoría</option>
+                </select>
+                <label>Nombre Contacto:</label>
+                <input type="text" id="addNombreContacto" required>
+                <label>Tel. Contacto:</label>
+                <input type="text" id="addTelefonoContacto" required>
+                <label>Correo Contacto:</label>
+                <input type="email" id="addCorreoContacto" required>
+                <label>Estado:</label>
                 <select id="addEstado" required>
                     <option value="activo">Activo</option>
                     <option value="inactivo">Inactivo</option>
-                </select>
-                <select id="addCategoria">
-                    <option value="">Selecciona una categoría</option>
                 </select>
                 <button type="submit">Guardar</button>
                 <button type="button" id="closeAddModal">Cancelar</button>
             </form>
         </div>
     </div>
-    <!-- Modal Editar Proveedor -->
+    <!-- Modal Editar -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h2>Editar Proveedor</h2>
             <form id="editForm">
                 <input type="hidden" id="editId">
-                <input type="text" id="editNombre" placeholder="Nombre" required>
-                <input type="text" id="editTelefono" placeholder="Teléfono" required>
-                <input type="email" id="editCorreo" placeholder="Correo" required>
-                <input type="text" id="editDireccion" placeholder="Dirección" required>
-                <input type="text" id="editCiudad" placeholder="Ciudad" required>
-                <input type="text" id="editNombreContacto" placeholder="Nombre Contacto" required>
-                <input type="text" id="editTelefonoContacto" placeholder="Teléfono Contacto" required>
-                <input type="email" id="editCorreoContacto" placeholder="Correo Contacto" required>
+                <label>Nombre Empresa:</label>
+                <input type="text" id="editNombre" required>
+                <label>Teléfono Empresa:</label>
+                <input type="text" id="editTelefono" required>
+                <label>Correo Empresa:</label>
+                <input type="email" id="editCorreo" required>
+                <label>Dirección:</label>
+                <input type="text" id="editDireccion" required>
+                <label>Ciudad:</label>
+                <input type="text" id="editCiudad" required>
+                <label>Categoría:</label>
+                <select id="editCategoria" required></select>
+                <label>Nombre Contacto:</label>
+                <input type="text" id="editNombreContacto" required>
+                <label>Tel. Contacto:</label>
+                <input type="text" id="editTelefonoContacto" required>
+                <label>Correo Contacto:</label>
+                <input type="email" id="editCorreoContacto" required>
+                <label>Estado:</label>
                 <select id="editEstado" required>
                     <option value="activo">Activo</option>
                     <option value="inactivo">Inactivo</option>
-                </select>
-                <select id="editCategoria">
-                    <option value="">Selecciona una categoría</option>
                 </select>
                 <button type="submit">Guardar cambios</button>
                 <button type="button" id="closeEditModal">Cancelar</button>
             </form>
         </div>
     </div>
-    <!-- Modal para mostrar Contacto -->
+    <!-- Modal Contacto -->
     <div id="contactModal" class="modal">
         <div class="modal-content">
-            <h2>Información de Contacto</h2>
-            <p><strong>Nombre Contacto:</strong> <span id="contactName"></span></p>
-            <p><strong>Teléfono Contacto:</strong> <span id="contactPhone"></span></p>
-            <p><strong>Correo Contacto:</strong> <span id="contactEmail"></span></p>
+            <h2>Contacto</h2>
+            <p><strong>Nombre:</strong> <span id="contactName"></span></p>
+            <p><strong>Teléfono:</strong> <span id="contactPhone"></span></p>
+            <p><strong>Correo:</strong> <span id="contactEmail"></span></p>
             <button type="button" id="closeContactModal">Cerrar</button>
         </div>
     </div>

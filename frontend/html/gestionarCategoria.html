@@ -9,25 +9,13 @@
 </head>
 <body>
     <div class="encabezado">
-        <div class="menu-icono" id="menuBtn">
-            <i class="bi bi-list"></i>
-        </div>
-
-        <div class="usuario">
-            <i class="bi bi-person-circle"></i>
-            <span id="nombreUsuario">Usuario</span>
-        </div>
-        <div class="cerrarSesion">
-            <a href="../html/index.html">Cerrar Sesion
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
+        <div class="menu-icono" id="menuBtn"><i class="bi bi-list"></i></div>
+        <div class="usuario"><i class="bi bi-person-circle"></i><span id="nombreUsuario">Usuario</span></div>
+        <div class="cerrarSesion"><a href="../html/index.html">Cerrar Sesion <i class="bi bi-box-arrow-right"></i></a></div>
     </div>
 
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h1 id="parte1">Inova</h1><h1 id="parte2">X</h1>
-        </div>
+        <div class="sidebar-header"><h1 id="parte1">Inova</h1><h1 id="parte2">X</h1></div>
         <ul>
             <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
             <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
@@ -38,12 +26,13 @@
             <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
         </ul>
     </div>
-
     <div id="overlay" class="overlay"></div>
 
     <div class="contenedor-tabla">
         <h2>LISTA DE CATEGORIAS</h2>
-        <button id="openAddModalBtn">+ Agregar Categoria</button>
+        <div class="clearfix">
+            <button id="openAddModalBtn">+ Agregar Categoria</button>
+        </div>
         <table cellspacing="0" cellpadding="10" id="tablaProducto">
             <thead>
                 <tr>
@@ -56,26 +45,30 @@
             <tbody id="categoryTableBody"></tbody>
         </table>
     </div>
-    <!--Modal para Agregar Producto -->
+    <!-- Modal Agregar -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h2>Agregar Categoria</h2>
             <form id="addForm">
-                <input type="text" id="addCategory" placeholder="Nombre" required>
-                <input type="text" id="addDescription" placeholder="Descripcion">
+                <label>Nombre Categoría:</label>
+                <input type="text" id="addCategory" required>
+                <label>Descripción:</label>
+                <input type="text" id="addDescription">
                 <button type="submit">Guardar</button>
                 <button type="button" id="closeAddModal">Cancelar</button>
             </form>
         </div>
     </div>
-    <!--Modal para Editar Producto -->
+    <!-- Modal Editar -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h2>Editar Categoria</h2>
             <form id="editForm"> 
                 <input type="hidden" id="editId">
-                <input type="text" id="editCategory" placeholder="Nombre" required>
-                <input type="text" id="editDescription" placeholder="Descripcion">
+                <label>Nombre Categoría:</label>
+                <input type="text" id="editCategory" required>
+                <label>Descripción:</label>
+                <input type="text" id="editDescription">
                 <button type="submit">Guardar cambios</button>
                 <button type="button" id="closeEditModal">Cancelar</button>
             </form>

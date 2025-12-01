@@ -60,16 +60,14 @@
             <span id="closeAddModal" class="close">&times;</span>
             <h2>Nueva Compra</h2>
             <form id="addForm">
-                <!-- CABECERA: Proveedor y Método Pago -->
+                <!-- CABECERA: Empleado y Método Pago -->
                 <div class="fila-flexible">
                     <div class="grupo-input">
-                        <!-- Aquí cargaremos los PROVEEDORES -->
                         <label for="selectProveedor">Proveedor:</label>
                         <select id="selectProveedor" required>
                             <option value="" disabled selected>Cargando...</option>
                         </select>
                     </div>
-                    <!-- Opcional: Selección de empleado, o se usa el token -->
                     <div class="grupo-input">
                          <label for="selectUsuario">Empleado (Resp):</label>
                          <select id="selectUsuario" required></select>
@@ -87,7 +85,6 @@
                     </div>
                 </div>
                 <hr class="separador">
-                <!-- SECCIÓN: Buscador y Agregar -->
                 <div class="seccion-agregar">
                     <h4>Productos a Comprar</h4>
                     <div class="grupo-input">
@@ -105,7 +102,6 @@
                             <label>Cant:</label>
                             <input type="number" id="inputCantidad" value="1" min="1">
                         </div>
-                        <!-- En compras a veces el precio cambia, es útil un input -->
                         <div class="grupo-cantidad">
                             <label>Costo U.:</label>
                             <input type="number" id="inputCosto" step="0.01" min="0" placeholder="Auto">

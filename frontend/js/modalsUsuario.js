@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${u.correo}</td>
                 <td>${u.rol}</td>
                 <td>
-                    <button onclick="openEditModal('${u.idUsuario}', '${u.nombre}', '${u.apellido}', '${u.cedula}', '${u.telefono}', '${u.correo}', '${u.roles_id}')">Editar</button>
-                    <button onclick="deleteUser(${u.idUsuario})">Eliminar</button>
+                    <button onclick="openEditModal('${u.idUsuario}', '${u.nombre}', '${u.apellido}', '${u.cedula}', '${u.telefono}', '${u.correo}', '${u.roles_id}')"><i class="bi bi-pencil-square"></i></button>
+                    <button onclick="deleteUser(${u.idUsuario})"><i class="bi bi-trash"></i></button>
                 </td>
             `;
             tableBody.appendChild(row);

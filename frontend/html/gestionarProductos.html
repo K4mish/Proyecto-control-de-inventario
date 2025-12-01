@@ -9,25 +9,13 @@
 </head>
 <body>
     <div class="encabezado">
-        <div class="menu-icono" id="menuBtn">
-            <i class="bi bi-list"></i>
-        </div>
-
-        <div class="usuario">
-            <i class="bi bi-person-circle"></i>
-            <span id="nombreUsuario">Usuario</span>
-        </div>
-        <div class="cerrarSesion">
-            <a href="../html/index.html">Cerrar Sesion
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
+        <div class="menu-icono" id="menuBtn"><i class="bi bi-list"></i></div>
+        <div class="usuario"><i class="bi bi-person-circle"></i><span id="nombreUsuario">Usuario</span></div>
+        <div class="cerrarSesion"><a href="../html/index.html">Cerrar Sesion <i class="bi bi-box-arrow-right"></i></a></div>
     </div>
 
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h1 id="parte1">Inova</h1><h1 id="parte2">X</h1>
-        </div>
+        <div class="sidebar-header"><h1 id="parte1">Inova</h1><h1 id="parte2">X</h1></div>
         <ul>
             <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
             <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
@@ -38,12 +26,13 @@
             <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
         </ul>
     </div>
-
     <div id="overlay" class="overlay"></div>
 
     <div class="contenedor-tabla">
         <h2>LISTA DE PRODUCTOS</h2>
-        <button id="openAddModalBtn">+ Agregar Producto</button>
+        <div class="clearfix">
+             <button id="openAddModalBtn">+ Agregar Producto</button>
+        </div>
         <table cellspacing="0" cellpadding="10" id="tablaProducto">
             <thead>
                 <tr>
@@ -53,92 +42,60 @@
                     <th>Categoría</th>
                     <th>Proveedor</th>
                     <th>Precio Venta</th>
-                    <th>Precio Compra</th>
+                    <th id="thPrecioCompra">Precio Compra</th>
                     <th>Stock</th>
-                    <th>Acciones</th>
+                    <th id="thAcciones">Acciones</th>
                 </tr>
             </thead>
             <tbody id="productTableBody"></tbody>
         </table>
     </div>
-    <!--Modal para Agregar Producto -->
+    <!-- Modal Agregar -->
     <div id="addModal" class="modal">
         <div class="modal-content">
-            <span id="closeAddModal" class="close">&times;</span>
             <h2>Agregar Producto</h2>
             <form id="addForm">
-                <div class="grupo-input">
-                    <input type="text" id="addName" placeholder="Nombre del Producto" required>
-                </div>
-                <div class="grupo-input">
-                    <select id="addCategory" required>
-                        <option value="">Cargando categorías...</option>
-                    </select>
-                </div>
-                <div class="grupo-input">
-                    <select id="addProvider" required>
-                        <option value="">Cargando proveedores...</option>
-                    </select>
-                </div>
-                <div class="fila-flexible">
-                    <input type="number" id="addPriceSell" placeholder="Precio Venta" step="0.01" required>
-                    <input type="number" id="addPriceBuy" placeholder="Precio Compra" step="0.01" required>
-                </div>
-                <div class="grupo-input">
-                    <input type="number" id="addStock" placeholder="Stock Inicial" required>
-                </div>
-                <div class="grupo-input">
-                    <input type="url" id="addImage" placeholder="URL de la imagen (http://...)">
-                </div>
-                
-                <div class="botones-modal">
-                    <button type="button" id="btnCancelAdd" class="btn-cancelar">Cancelar</button>
-                    <button type="submit" class="btn-guardar">Guardar</button>
-                </div>
+                <label>Nombre del Producto:</label>
+                <input type="text" id="addName" required>
+                <label>Categoría:</label>
+                <select id="addCategory" required></select>
+                <label>Proveedor:</label>
+                <select id="addProvider" required></select>
+                <label>Precio Venta:</label>
+                <input type="number" id="addPriceSell" step="0.01" required>
+                <label>Precio Compra:</label>
+                <input type="number" id="addPriceBuy" step="0.01" required>
+                <label>Stock Inicial:</label>
+                <input type="number" id="addStock" required>
+                <label>URL Imagen:</label>
+                <input type="url" id="addImage" placeholder="http://...">
+                <button type="submit">Guardar</button>
+                <button type="button" id="closeAddModal">Cancelar</button>
             </form>
         </div>
     </div>
-    <!--Modal para Editar Producto -->
+    <!-- Modal Editar -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <span id="closeEditModal" class="close">&times;</span>
             <h2>Editar Producto</h2>
             <form id="editForm">
                 <input type="hidden" id="editId">
-                <div class="grupo-input">
-                    <label>Nombre:</label>
-                    <input type="text" id="editName" required>
-                </div>
-                <div class="grupo-input">
-                    <label>Categoría:</label>
-                    <select id="editCategory" required></select>
-                </div>
-                <div class="grupo-input">
-                    <label>Proveedor:</label>
-                    <select id="editProvider" required></select>
-                </div>
-                <div class="fila-flexible">
-                    <div>
-                        <label>P. Venta:</label>
-                        <input type="number" id="editPriceSell" step="0.01" required>
-                    </div>
-                    <div>
-                        <label>P. Compra:</label>
-                        <input type="number" id="editPriceBuy" step="0.01" required>
-                    </div>
-                </div>
-                <div class="grupo-input">
-                    <label>Stock:</label>
-                    <input type="number" id="editStock" required>
-                </div>
-                <div class="grupo-input">
-                    <label>Imagen URL:</label>
-                    <input type="url" id="editImage">
-                </div>
-                <div class="botones-modal">
-                    <button type="button" id="btnCancelEdit" class="btn-cancelar">Cancelar</button>
-                    <button type="submit" class="btn-guardar">Guardar Cambios</button>
-                </div>
+                <label>Nombre:</label>
+                <input type="text" id="editName" required>
+                <label>Categoría:</label>
+                <select id="editCategory" required></select>
+                <label>Proveedor:</label>
+                <select id="editProvider" required></select>
+                <label>Precio Venta:</label>
+                <input type="number" id="editPriceSell" step="0.01" required>
+                <label>Precio Compra:</label>
+                <input type="number" id="editPriceBuy" step="0.01" required>
+                <label>Stock:</label>
+                <input type="number" id="editStock" required>
+                <label>URL Imagen:</label>
+                <input type="url" id="editImage">
+                <button type="submit">Guardar Cambios</button>
+                <button type="button" id="closeEditModal">Cancelar</button>
             </form>
         </div>
     </div>

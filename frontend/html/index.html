@@ -21,7 +21,7 @@
                     <i class='bx bxs-lock-alt' ></i>
                 </div>
                 <div class="forgot-link">
-                    <a href="../html/olvidoContraseña.html">Olvido su contraseña?</a>
+                    <a href="#" id="forgotBtn">Olvido su contraseña?</a>
                 </div>
                 <button type="submit" class="btn">Iniciar Sesion</button>
             </form>
@@ -66,6 +66,21 @@
                 <p>Ya tienes una cuenta?</p>
                 <button class="btn login-btn">Iniciar Sesion</button>
             </div>
+        </div>
+    </div>
+    <!-- MODAL RECUPERAR CONTRASEÑA -->
+    <div id="forgotModal" class="modal-forgot">
+        <div class="modal-content-forgot">
+            <span class="close-forgot">&times;</span>
+            <h2>Recuperar Contraseña</h2>
+            <p>Ingresa tu correo electrónico para recibir el código de recuperación.</p>
+            <form id="formRecovery">
+                <div class="input-box">
+                    <input type="email" id="emailRecovery" required placeholder="correo@ejemplo.com">
+                    <i class='bx bxs-envelope'></i>
+                </div>
+                <button type="submit" class="btn">Enviar código</button>
+            </form>
         </div>
     </div>
     <script src="../js/script.js"></script>

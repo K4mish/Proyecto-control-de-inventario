@@ -9,24 +9,14 @@
 </head>
 <body>
     <div class="encabezado">
-        <div class="menu-icono" id="menuBtn">
-            <i class="bi bi-list"></i>
-        </div>
-        <div class="usuario">
-            <i class="bi bi-person-circle"></i>
-            <span id="nombreUsuario">Usuario</span>
-        </div>
-        <div class="cerrarSesion">
-            <a href="../html/index.html">Cerrar Sesión
-                <i class="bi bi-box-arrow-right"></i>
-            </a>
-        </div>
+        <div class="menu-icono" id="menuBtn"><i class="bi bi-list"></i></div>
+        <div class="usuario"><i class="bi bi-person-circle"></i><span id="nombreUsuario">Usuario</span></div>
+        <div class="cerrarSesion"><a href="../html/index.html">Cerrar Sesión <i class="bi bi-box-arrow-right"></i></a></div>
     </div>
 
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h1 id="parte1">Inova</h1><h1 id="parte2">X</h1>
-        </div>
+        <!-- Contenido sidebar estándar -->
+        <div class="sidebar-header"><h1 id="parte1">Inova</h1><h1 id="parte2">X</h1></div>
         <ul>
             <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
             <li><a href="../html/gestionarCategoria.html">Gestionar Categorías</a></li>
@@ -37,12 +27,13 @@
             <li><a href="../html/alertasStock.html">Alertas de Stock</a></li>
         </ul>
     </div>
-
     <div id="overlay" class="overlay"></div>
 
     <div class="contenedor-tabla">
         <h2>LISTA DE USUARIOS</h2>
-        <button id="openAddModalBtn">+ Agregar Usuario</button>
+        <div class="clearfix">
+            <button id="openAddModalBtn">+ Agregar Usuario</button>
+        </div>
         <table cellspacing="0" cellpadding="10" id="tablaUsuarios">
             <thead>
                 <tr>
@@ -59,20 +50,25 @@
             <tbody id="userTableBody"></tbody>
         </table>
     </div>
-
-    <!-- Modal para Agregar Usuario -->
+    <!-- Modal Agregar -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h2>Agregar Usuario</h2>
             <form id="addForm">
-                <input type="text" id="addNombre" placeholder="Nombre" required>
-                <input type="text" id="addApellido" placeholder="Apellido" required>
-                <input type="text" id="addCedula" placeholder="Cédula" required>
-                <input type="text" id="addTelefono" placeholder="Teléfono" required>
-                <input type="email" id="addCorreo" placeholder="Correo" required>
-                <input type="password" id="addContrasena" placeholder="Contraseña" required>
+                <label>Nombre:</label>
+                <input type="text" id="addNombre" required>
+                <label>Apellido:</label>
+                <input type="text" id="addApellido" required>
+                <label>Cédula:</label>
+                <input type="text" id="addCedula" required>
+                <label>Teléfono:</label>
+                <input type="text" id="addTelefono" required>
+                <label>Correo Electrónico:</label>
+                <input type="email" id="addCorreo" required>
+                <label>Contraseña:</label>
+                <input type="password" id="addContrasena" required>
+                <label>Rol:</label>
                 <select id="addRol" required>
-                    <option value="">Seleccione rol</option>
                     <option value="1">Admin</option>
                     <option value="2">Empleado</option>
                 </select>
@@ -81,20 +77,24 @@
             </form>
         </div>
     </div>
-
-    <!-- Modal para Editar Usuario -->
+    <!-- Modal Editar -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h2>Editar Usuario</h2>
             <form id="editForm">
                 <input type="hidden" id="editId">
-                <input type="text" id="editNombre" placeholder="Nombre" required>
-                <input type="text" id="editApellido" placeholder="Apellido" required>
-                <input type="text" id="editCedula" placeholder="Cédula" required>
-                <input type="text" id="editTelefono" placeholder="Teléfono" required>
-                <input type="email" id="editCorreo" placeholder="Correo" required>
+                <label>Nombre:</label>
+                <input type="text" id="editNombre" required>
+                <label>Apellido:</label>
+                <input type="text" id="editApellido" required>
+                <label>Cédula:</label>
+                <input type="text" id="editCedula" required>
+                <label>Teléfono:</label>
+                <input type="text" id="editTelefono" required>
+                <label>Correo Electrónico:</label>
+                <input type="email" id="editCorreo" required>
+                <label>Rol:</label>
                 <select id="editRol" required>
-                    <option value="">Seleccione rol</option>
                     <option value="1">Admin</option>
                     <option value="2">Empleado</option>
                 </select>
@@ -103,7 +103,6 @@
             </form>
         </div>
     </div>
-
     <script src="../js/verificarToken.js"></script>
     <script src="../js/modalsUsuario.js"></script>
     <script src="../js/sidebar.js"></script>
