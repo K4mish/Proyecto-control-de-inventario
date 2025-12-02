@@ -5,6 +5,7 @@ const API_URL_PRODUCTOS = "http://localhost:3000/api/productos";
 let usuariosGlobales = [];
 let productosGlobales = [];
 let carritoVenta = [];
+let usuarioSesion = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!token) {
@@ -49,17 +50,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputEditId = document.getElementById("editId");
     const lblIdVenta = document.getElementById("lblIdVenta");
     const selectEditEstado = document.getElementById("editEstado");
-
-    async function cargarUsuarios(){
+    
+    function parseJwt(token) {
         try {
+            const base64Payload = token.split('.')[1];
+            const payload = atob(base64Payload);
+            return JSON.parse(payload);
+        } catch (e) {
+            return null;
+        }
+    }
+    usuarioSesion = parseJwt(token);
+
+    async function cargarUsuarios() {
+        if (!usuarioSesion) {
+            console.error("Usuario de sesión no definido");
+            return;
+        }
+
+        if (usuarioSesion.rol === "empleado") {
+            selectUsuario.innerHTML = `<option value="${usuarioSesion.idUsuario}" selected>${usuarioSesion.nombre}</option>`;
+            selectUsuario.disabled = true;
+        } else {
             const res = await fetch(API_URL_USUARIOS, { headers: { "Authorization": `Bearer ${token}` } });
             const data = await res.json();
             usuariosGlobales = data.usuarios || data;
             selectUsuario.innerHTML = '<option value="" disabled selected>Seleccione un empleado</option>';
             usuariosGlobales.forEach(u => {
-                selectUsuario.innerHTML += `<option value="${u.idUsuario}">${u.nombre} ${u.apellido}</option>`;
+                selectUsuario.innerHTML += `<option value="${u.idUsuario}">${u.nombre}</option>`;
             });
-        } catch (error){ console.error("Error cargando usuarios", error); }
+            selectUsuario.disabled = false;
+        }
     }
 
     async function cargarProductos(){

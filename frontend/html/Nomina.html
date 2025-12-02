@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrar Usuarios</title>
+    <title>Administrar Salarios</title>
     <link rel="stylesheet" href="../css/gestionarTabla.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
@@ -15,7 +15,6 @@
     </div>
 
     <div id="sidebar" class="sidebar">
-        <!-- Contenido sidebar estándar -->
         <div class="sidebar-header"><h1 id="parte1">Inova</h1><h1 id="parte2">X</h1></div>
         <ul>
             <li><a href="../html/gestionarUsuarios.html">Administrar Usuarios</a></li>
@@ -31,48 +30,40 @@
     <div id="overlay" class="overlay"></div>
 
     <div class="contenedor-tabla">
-        <h2>LISTA DE USUARIOS</h2>
+        <h2>LISTA DE SALARIOS</h2>
         <div class="clearfix">
-            <button id="openAddModalBtn">+ Agregar Usuario</button>
+            <button id="openAddModalBtn">+ Agregar Salario</button>
         </div>
-        <table cellspacing="0" cellpadding="10" id="tablaUsuarios">
+        <table cellspacing="0" cellpadding="10" id="tablaSalarios">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Cédula</th>
-                    <th>Teléfono</th>
-                    <th>Correo</th>
-                    <th>Rol</th>
+                    <th>Empleado</th>
+                    <th>Cargo</th>
+                    <th>Salario Base</th>
+                    <th>Bonificación</th>
+                    <th>Deducción</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="userTableBody"></tbody>
+            <tbody id="salarioTableBody"></tbody>
         </table>
     </div>
     <!-- Modal Agregar -->
     <div id="addModal" class="modal">
         <div class="modal-content">
-            <h2>Agregar Usuario</h2>
+            <h2>Agregar Salario</h2>
             <form id="addForm">
-                <label>Nombre:</label>
-                <input type="text" id="addNombre" required>
-                <label>Apellido:</label>
-                <input type="text" id="addApellido" required>
-                <label>Cédula:</label>
-                <input type="text" id="addCedula" required>
-                <label>Teléfono:</label>
-                <input type="text" id="addTelefono" required>
-                <label>Correo Electrónico:</label>
-                <input type="email" id="addCorreo" required>
-                <label>Contraseña:</label>
-                <input type="password" id="addContrasena" required>
-                <label>Rol:</label>
-                <select id="addRol" required>
-                    <option value="1">Admin</option>
-                    <option value="2">Empleado</option>
+                <label>Empleado:</label>
+                <select id="addEmpleado" required></select>
+                <label>Cargo:</label>
+                <select id="addCargo" required>
+                    <option value="vendedor">Vendedor</option>
+                    <option value="encargado">Encargado</option>
+                    <option value="auxiliar de almacén">Auxiliar de almacén</option>
                 </select>
+                <label>Salario Base:</label>
+                <input type="number" id="addSalarioBase" min="0" step="0.01" required>
                 <button type="submit">Guardar</button>
                 <button type="button" id="closeAddModal">Cancelar</button>
             </form>
@@ -81,30 +72,25 @@
     <!-- Modal Editar -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <h2>Editar Usuario</h2>
+            <h2>Editar Salario</h2>
             <form id="editForm">
                 <input type="hidden" id="editId">
-                <label>Nombre:</label>
-                <input type="text" id="editNombre" required>
-                <label>Apellido:</label>
-                <input type="text" id="editApellido" required>
-                <label>Cédula:</label>
-                <input type="text" id="editCedula" required>
-                <label>Teléfono:</label>
-                <input type="text" id="editTelefono" required>
-                <label>Correo Electrónico:</label>
-                <input type="email" id="editCorreo" required>
-                <label>Rol:</label>
-                <select id="editRol" required>
-                    <option value="1">Admin</option>
-                    <option value="2">Empleado</option>
+                <label>Empleado:</label>
+                <select id="editEmpleado" disabled></select>
+                <label>Cargo:</label>
+                <select id="editCargo" required>
+                    <option value="vendedor">Vendedor</option>
+                    <option value="encargado">Encargado</option>
+                    <option value="auxiliar de almacén">Auxiliar de almacén</option>
                 </select>
+                <label>Salario Base:</label>
+                <input type="number" id="editSalarioBase" min="0" step="0.01" required>
                 <button type="submit">Guardar cambios</button>
                 <button type="button" id="closeEditModal">Cancelar</button>
             </form>
         </div>
     </div>
-    <!-- Modal Mensaje (Reemplazo de Alerts) -->
+    <!-- Modal Mensaje -->
     <div id="messageModal" class="modal">
         <div class="modal-content">
             <h2 id="msgTitle">Título</h2>
@@ -113,7 +99,7 @@
         </div>
     </div>
     <script src="../js/verificarToken.js"></script>
-    <script src="../js/modalsUsuario.js"></script>
+    <script src="../js/modalsNomina.js"></script>
     <script src="../js/sidebar.js"></script>
 </body>
 </html>

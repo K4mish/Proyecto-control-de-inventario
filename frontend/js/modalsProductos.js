@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editModal = document.getElementById("editModal");
     const editForm = document.getElementById("editForm");
     const closeEditModal = document.getElementById("closeEditModal");
-    const addCategoria = document.getElementById("addCategoria");
+    const addCategoria = document.getElementById("addCategory");
     const addProveedor = document.getElementById("addProvider");
     const editCategoria = document.getElementById("editCategory");
     const editProveedor = document.getElementById("editProvider");
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             products.forEach(p => {
                 const row = document.createElement("tr");
-                 let htmlRow = `
+                let htmlRow = `
                     <td>${p.idProducto}</td>
                     <td><img src="${p.urlImagen || '../assets/no-image.png'}" class="img-producto" alt="Img"></td>
                     <td><strong>${p.nombre}</strong></td>

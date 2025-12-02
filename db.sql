@@ -101,6 +101,7 @@ CREATE TABLE detalleCompras (
 
 CREATE TABLE salarios (
   idSalario INT AUTO_INCREMENT PRIMARY KEY,
+  cargo ENUM('vendedor', 'encargado', 'auxiliar de almacén') NOT NULL DEFAULT 'vendedor',
   salarioBase DECIMAL(10,2) NOT NULL,
   bonificacion DECIMAL(10,2) NOT NULL,
   deduccion DECIMAL(10,2) NOT NULL,
